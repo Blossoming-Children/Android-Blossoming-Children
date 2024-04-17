@@ -11,4 +11,3 @@ plugins {
 dependencyGuard {
     configuration("classpath")
 }
-
