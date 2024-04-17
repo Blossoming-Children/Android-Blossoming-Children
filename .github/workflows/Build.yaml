@@ -13,6 +13,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v3
+
       - name: Setup Java JDK
         uses: actions/setup-java@v3
         with:
@@ -26,9 +29,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
-      - name: Build with Gradle
-        run: ./gradlew build
 
       - name: Spotless Check
         run: ./gradlew spotlessCheck
