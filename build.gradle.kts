@@ -5,4 +5,10 @@ plugins {
 
     id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
     id("com.diffplug.spotless") version "6.19.0"
+    id("com.dropbox.dependency-guard") version "0.3.2"
 }
+
+dependencyGuard {
+    configuration("classpath")
+}
+
