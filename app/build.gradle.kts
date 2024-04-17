@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -66,4 +67,15 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("io.coil-kt:coil:2.2.2")
+
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+
+    implementation("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+    implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
 }
