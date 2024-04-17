@@ -1,0 +1,55 @@
+name: Android CI
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Spotless Check
+        run: ./gradlew spotlessCheck
+
+      - name: Lint Check
+        run: ./gradlew lintRelease
+
+      - name: Dependency Guard Check
+        id: dependencyguard_verify
+        continue-on-error: true
+        run: ./gradlew dependencyGuard
+
+      - name: Generate new Dependency Guard baselines
+        id: dependencyguard_baseline
+        if: steps.dependencyguard_verify.outcome == 'failure'
+        run: ./gradlew dependencyGuardBaseline
+
+      - name: Push new Dependency Guard baselines
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: steps.dependencyguard_baseline.outcome == 'success'
+        with:
+          file_pattern: "**/dependencies/*.txt"
+          disable_globbing: true
+          commit_message: "📝[DOCS] 의존성 목록 업데이트"
