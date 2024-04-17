@@ -34,7 +34,7 @@ jobs:
         run: ./gradlew spotlessCheck
 
       - name: Lint Check
-        run: ./gradlew lintRelease
+        run: ./gradlew lint
 
       - name: Dependency Guard Check
         id: dependencyguard_verify

@@ -12,3 +12,18 @@ dependencyGuard {
     configuration("classpath")
 }
 
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = "com.diffplug.spotless")
+    spotless {
+        kotlin {
+            target("src/**/*.kt")
+            targetExclude("**/build/**/*.kt")
+            ktlint("0.48.1")
+        }
+        format("kts") {
+            target("src/**/*.kts")
+            targetExclude("**/build/**/*.kts")
+        }
+    }
+}
