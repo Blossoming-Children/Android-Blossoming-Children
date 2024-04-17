@@ -31,7 +31,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Spotless Check
-        run: ./gradlew spotlessCheck
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
       - name: Lint Check
         run: ./gradlew lintRelease
