@@ -43,9 +43,56 @@ class StudyActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-
+                    StudyScreen(activity = this)
                 }
             }
         }
     }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun StudyScreen(activity : ComponentActivity) {
+    Scaffold(
+        topBar = {
+            StudyTopAppBar(onBackClicked = {activity.finish()})
+        },
+        content = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("여기는 동작 교육 화면입니다! 👏👏👏")
+            }
+        }
+    )
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StudyTopAppBar(onBackClicked: () -> Unit) {
+    val backIcon : Painter = painterResource(id = R.drawable.back_arrow)
+
+    CenterAlignedTopAppBar(
+        navigationIcon = {
+            IconButton(onClick = onBackClicked) {
+                Icon(
+                    painter = backIcon,
+                    contentDescription = "Back"
+                )
+            }
+        },
+        title = {
+            Text(
+                text = "동작 교육",
+                fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
+                color = Blue,
+                fontSize = 20.sp
+            )
+        }
+    )
 }
