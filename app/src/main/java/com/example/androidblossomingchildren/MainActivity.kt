@@ -80,5 +80,13 @@ fun MainContent(context: Context) {
     ) {
         Text("메인 화면이에요~ 🤗🤗🤗")
         Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                val intent = Intent(context, StudyActivity::class.java)
+                context.startActivity(intent)
+            }
+        ) {
+            Text("버튼을 클릭해주세요")
+        }
     }
 }
