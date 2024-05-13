@@ -5,18 +5,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -29,6 +30,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,7 +43,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.ui.theme.AndroidBlossomingChildrenTheme
 import com.example.androidblossomingchildren.ui.theme.Blue
+import com.example.androidblossomingchildren.ui.theme.Gray
 import com.example.androidblossomingchildren.ui.theme.Red
+import com.example.androidblossomingchildren.ui.theme.Yellow
+import androidx.compose.runtime.*
 
 
 class StudyActivity : ComponentActivity() {
@@ -102,6 +108,8 @@ fun StudyScreen(activity: ComponentActivity) {
 fun GridItem(item: String) {
     val progress = 0.75f
 
+    var isBookmarked by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -124,7 +132,7 @@ fun GridItem(item: String) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp),
+                    .padding(top = 4.dp),
             ) {
                 LinearProgressIndicator(
                     progress = progress,
@@ -137,24 +145,28 @@ fun GridItem(item: String) {
 
                 Text(
                     text = "${(progress * 100).toInt()}%",
-                    modifier = Modifier.padding(start = 8.dp),
+                    modifier = Modifier.padding(start = 4.dp),
                     style = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily(Font(R.font.laundrygothic_regular))),
                 )
             }
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 4.dp)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.bookmark_blank),
+                    tint = if (isBookmarked) Yellow else Gray,
                     contentDescription = "Bookmark",
+                    modifier = Modifier
+                        .clickable { isBookmarked = !isBookmarked }
                 )
 
                 Text(
                     text = item,
-                    modifier = Modifier.padding(start = 8.dp),
+                    modifier = Modifier.padding(start = 4.dp),
                     style = MaterialTheme.typography.bodyLarge.copy(fontFamily = FontFamily(Font(R.font.laundrygothic_regular))),
+                    fontSize = 16.sp
                 )
             }
         }
@@ -169,7 +181,7 @@ fun StudyTopAppBar(onBackClicked: () -> Unit) {
         navigationIcon = {
             IconButton(onClick = onBackClicked) {
                 Icon(
-                    painter = painterResource(id = R.drawable.back_arrow),
+                    imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = "Back",
                 )
             }
