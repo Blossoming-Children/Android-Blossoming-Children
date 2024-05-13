@@ -42,6 +42,7 @@ import com.example.androidblossomingchildren.ui.theme.AndroidBlossomingChildrenT
 import com.example.androidblossomingchildren.ui.theme.Blue
 import com.example.androidblossomingchildren.ui.theme.Red
 
+
 class StudyActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +58,22 @@ class StudyActivity : ComponentActivity() {
         }
     }
 }
+
+
+/*
+@Composable
+fun StudyActivity(){
+    AndroidBlossomingChildrenTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            StudyScreen()
+        }
+    }
+}
+*/
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -102,11 +119,12 @@ fun GridItem(item: String) {
                     .fillMaxWidth(),
                 contentScale = ContentScale.Crop,
             )
-            Spacer(Modifier.height(8.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
             ) {
                 LinearProgressIndicator(
                     progress = progress,
@@ -116,23 +134,26 @@ fun GridItem(item: String) {
                     color = Red,
                     trackColor = Color.LightGray,
                 )
-                Spacer(Modifier.width(8.dp))
 
                 Text(
                     text = "${(progress * 100).toInt()}%",
+                    modifier = Modifier.padding(start = 8.dp),
                     style = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily(Font(R.font.laundrygothic_regular))),
                 )
-                Spacer(Modifier.height(8.dp))
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.bookmark_blank),
                     contentDescription = "Bookmark",
                 )
-                Spacer(Modifier.width(8.dp))
+
                 Text(
                     text = item,
+                    modifier = Modifier.padding(start = 8.dp),
                     style = MaterialTheme.typography.bodyLarge.copy(fontFamily = FontFamily(Font(R.font.laundrygothic_regular))),
                 )
             }
