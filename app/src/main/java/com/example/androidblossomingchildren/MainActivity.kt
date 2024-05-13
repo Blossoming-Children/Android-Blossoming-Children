@@ -25,6 +25,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.util.theme.TionTheme
+import com.example.androidblossomingchildren.ui.theme.AndroidBlossomingChildrenTheme
+import com.example.androidblossomingchildren.ui.theme.Blue
 
 
 class MainActivity : ComponentActivity() {
@@ -84,7 +86,7 @@ fun MainContent(context: Context) {
             onClick = {
                 val intent = Intent(context, StudyActivity::class.java)
                 context.startActivity(intent)
-            }
+            },
         ) {
             Text("버튼을 클릭해주세요")
         }

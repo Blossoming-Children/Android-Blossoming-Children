@@ -58,7 +58,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalContext
 
-class StudyDetailActivity : ComponentActivity() {
+class StudyDetailActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

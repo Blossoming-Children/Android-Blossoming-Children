@@ -1,6 +1,7 @@
 package com.example.androidblossomingchildren
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,13 +30,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -46,7 +46,6 @@ import com.example.androidblossomingchildren.ui.theme.Blue
 import com.example.androidblossomingchildren.ui.theme.Gray
 import com.example.androidblossomingchildren.ui.theme.Red
 import com.example.androidblossomingchildren.ui.theme.Yellow
-import androidx.compose.runtime.*
 
 
 class StudyActivity : ComponentActivity() {
@@ -84,6 +83,8 @@ fun StudyActivity(){
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun StudyScreen(activity: ComponentActivity) {
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             StudyTopAppBar(onBackClicked = { activity.finish() })
@@ -97,7 +98,12 @@ fun StudyScreen(activity: ComponentActivity) {
                 modifier = Modifier.padding(padding),
             ) {
                 items(itemList) { item ->
-                    GridItem(item)
+                    GridItem(item, onClick = {
+                        Intent(context, StudyDetailActivity::class.java).apply {
+                            putExtra("ITEM_TEXT", item)
+                            context.startActivity(this)
+                        }
+                    })
                 }
             }
         },
@@ -105,7 +111,7 @@ fun StudyScreen(activity: ComponentActivity) {
 }
 
 @Composable
-fun GridItem(item: String) {
+fun GridItem(item: String, onClick: () -> Unit) {
     val progress = 0.75f
 
     var isBookmarked by remember { mutableStateOf(false) }
@@ -113,7 +119,8 @@ fun GridItem(item: String) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp,
         ),
