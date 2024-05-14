@@ -45,6 +45,7 @@ import com.example.androidblossomingchildren.ui.theme.AndroidBlossomingChildrenT
 import com.example.androidblossomingchildren.ui.theme.Blue
 import com.example.androidblossomingchildren.ui.theme.Gray
 import com.example.androidblossomingchildren.ui.theme.Red
+import com.example.androidblossomingchildren.ui.theme.White
 import com.example.androidblossomingchildren.ui.theme.Yellow
 
 
@@ -117,6 +118,7 @@ fun GridItem(item: String, onClick: () -> Unit) {
     var isBookmarked by remember { mutableStateOf(false) }
 
     Card(
+        colors = CardDefaults.cardColors(containerColor = White),
         modifier = Modifier
             .padding(8.dp)
             .fillMaxSize()
@@ -167,7 +169,7 @@ fun GridItem(item: String, onClick: () -> Unit) {
                     contentDescription = "Bookmark",
                     modifier = Modifier
                         .clickable { isBookmarked = !isBookmarked }
-                )
+                 )
 
                 Text(
                     text = item,
