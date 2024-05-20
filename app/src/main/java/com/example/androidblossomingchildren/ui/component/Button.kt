@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren.ui.components
+package com.example.androidblossomingchildren.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

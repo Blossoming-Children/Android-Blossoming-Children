@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren.ui.components
+package com.example.androidblossomingchildren.ui.component
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
