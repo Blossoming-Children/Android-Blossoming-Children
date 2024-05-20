@@ -26,7 +26,7 @@ fun TionTopAppBar(
     modifier: Modifier = Modifier,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     title: @Composable () -> Unit,
-){
+) {
     CenterAlignedTopAppBar(
         title = title,
         colors = colors,
@@ -43,7 +43,7 @@ fun TionTopAppBarBack(
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     title: @Composable () -> Unit,
     actions: @Composable RowScope.() -> Unit = { },
-){
+) {
     CenterAlignedTopAppBar(
         title = title,
         navigationIcon = {
@@ -100,6 +100,5 @@ private fun TionTopAppBarBackPreview() {
                 onNavigationClick = { },
             )
         }
-
     }
 }

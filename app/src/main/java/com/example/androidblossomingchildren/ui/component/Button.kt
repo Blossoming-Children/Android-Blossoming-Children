@@ -24,7 +24,7 @@ fun TionButton(
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     shape: Shape = ButtonDefaults.shape,
     content: @Composable RowScope.() -> Unit,
-){
+) {
     Button(
         onClick = onClick,
         modifier = modifier,
@@ -67,4 +67,3 @@ private fun TionButtonPreview() {
         }
     }
 }
-
