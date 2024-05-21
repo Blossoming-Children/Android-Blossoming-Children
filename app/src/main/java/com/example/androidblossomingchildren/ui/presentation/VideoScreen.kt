@@ -27,7 +27,7 @@ fun VideoScreen(
                 title = {
                     Text(text = Destinations.Video.route)
                 },
-                onNavigationClick = onNavigateToBack
+                onNavigationClick = onNavigateToBack,
             )
         },
     ) {

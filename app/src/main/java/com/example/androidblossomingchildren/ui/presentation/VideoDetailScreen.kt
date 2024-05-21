@@ -36,7 +36,6 @@ fun VideoDetailScreen(
                 .fillMaxSize()
                 .padding(it),
         ) {
-
         }
     }
 }

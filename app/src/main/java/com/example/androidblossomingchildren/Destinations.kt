@@ -1,24 +1,24 @@
 package com.example.androidblossomingchildren
 
-enum class Destinations (
+enum class Destinations(
     val route: String,
-){
+) {
     OnBoarding(
         route = "OnBoarding",
     ),
     Welcome(
-        route = "Welcome"
+        route = "Welcome",
     ),
     Home(
-        route = "Home"
+        route = "Home",
     ),
     Stamp(
-        route = "Stamp"
+        route = "Stamp",
     ),
     MyPage(
-        route = "MyPage"
+        route = "MyPage",
     ),
     Video(
-        route = "Video"
+        route = "Video",
     ),
 }

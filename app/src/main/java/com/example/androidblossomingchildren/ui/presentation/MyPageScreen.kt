@@ -21,7 +21,7 @@ import com.example.androidblossomingchildren.util.component.TionTopAppBar
 
 @Composable
 fun MyPageScreen(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     Scaffold(
         topBar = {
@@ -39,7 +39,7 @@ fun MyPageScreen(
                 )
             }
         },
-    ){
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
