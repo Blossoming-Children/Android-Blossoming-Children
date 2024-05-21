@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.androidblossomingchildren.ui.component
+package com.example.androidblossomingchildren.util.component
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,8 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.example.androidblossomingchildren.ui.ThemePreviews
-import com.example.androidblossomingchildren.ui.theme.TionTheme
+import com.example.androidblossomingchildren.util.ThemePreviews
+import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
 fun TionTopAppBar(

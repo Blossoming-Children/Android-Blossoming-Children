@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren.ui.theme
+package com.example.androidblossomingchildren.util.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme

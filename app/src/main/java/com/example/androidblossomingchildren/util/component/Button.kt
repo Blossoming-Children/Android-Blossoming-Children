@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren.ui.component
+package com.example.androidblossomingchildren.util.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import com.example.androidblossomingchildren.ui.ThemePreviews
-import com.example.androidblossomingchildren.ui.theme.TionTheme
+import com.example.androidblossomingchildren.util.ThemePreviews
+import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
 fun TionButton(

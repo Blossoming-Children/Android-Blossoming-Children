@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren.ui
+package com.example.androidblossomingchildren.util
 
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview

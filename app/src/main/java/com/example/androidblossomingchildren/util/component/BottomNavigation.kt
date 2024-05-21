@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren.ui.component
+package com.example.androidblossomingchildren.util.component
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
@@ -9,9 +9,9 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import com.example.androidblossomingchildren.ui.ThemePreviews
-import com.example.androidblossomingchildren.ui.icon.TionIcons
-import com.example.androidblossomingchildren.ui.theme.TionTheme
+import com.example.androidblossomingchildren.util.ThemePreviews
+import com.example.androidblossomingchildren.util.icon.TionIcons
+import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
 fun RowScope.TionNavigationBarItem(

@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren.ui.icon
+package com.example.androidblossomingchildren.util.icon
 
 import com.example.androidblossomingchildren.R
 
