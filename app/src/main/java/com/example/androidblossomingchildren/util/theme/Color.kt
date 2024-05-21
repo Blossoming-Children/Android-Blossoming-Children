@@ -2,10 +2,6 @@ package com.example.androidblossomingchildren.util.theme
 
 import androidx.compose.ui.graphics.Color
 
-val BlueGrey500 = Color(0xFF7BA0DD)
-val Blue50 = Color(0xFFEDF1FD)
-val Blue80 = Color(0xFFD6E0F7)
-
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
 

@@ -9,6 +9,9 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
+import com.example.androidblossomingchildren.Destinations
+import com.example.androidblossomingchildren.navigateSingleTopTo
 import com.example.androidblossomingchildren.util.ThemePreviews
 import com.example.androidblossomingchildren.util.icon.TionIcons
 import com.example.androidblossomingchildren.util.theme.TionTheme
@@ -30,9 +33,9 @@ fun RowScope.TionNavigationBarItem(
         enabled = enabled,
         colors =
         NavigationBarItemDefaults.colors(
-            indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-            selectedIconColor = MaterialTheme.colorScheme.primary,
-            unselectedIconColor = MaterialTheme.colorScheme.onTertiary,
+            indicatorColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            selectedIconColor = MaterialTheme.colorScheme.secondaryContainer,
+            unselectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
         ),
     )
 }
@@ -44,10 +47,51 @@ fun TionNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.surface,
-        contentColor = MaterialTheme.colorScheme.surface,
+        containerColor = MaterialTheme.colorScheme.onTertiaryContainer,
+        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         content = content,
     )
+}
+
+@Composable
+fun RowScope.TionNavigationBarContent(
+    currentScreen: Destinations,
+    navController: NavHostController,
+){
+    val items = listOf("Home", "Stamp", "MyPage")
+    val icons =
+        listOf(
+            TionIcons.Home,
+            TionIcons.Stamp,
+            TionIcons.MyPage,
+        )
+    val selectedIcons =
+        listOf(
+            TionIcons.HomeSelected,
+            TionIcons.StampSelected,
+            TionIcons.MyPageSelected,
+        )
+
+    items.forEachIndexed { index, _ ->
+        TionNavigationBarItem(
+            selected = currentScreen.route == items[index],
+            onClick = {
+                navController.navigateSingleTopTo(items[index])
+            },
+            icon = {
+                Icon(
+                    painterResource(id = icons[index]),
+                    contentDescription = null,
+                )
+            },
+            selectedIcon = {
+                Icon(
+                    painterResource(id = selectedIcons[index]),
+                    contentDescription = null,
+                )
+            },
+        )
+    }
 }
 
 @ThemePreviews
@@ -60,7 +104,6 @@ private fun TionNavigationBarPreview() {
             TionIcons.Stamp,
             TionIcons.MyPage,
         )
-
     val selectedIcons =
         listOf(
             TionIcons.HomeSelected,
