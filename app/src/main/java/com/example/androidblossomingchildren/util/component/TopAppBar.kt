@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -27,7 +28,7 @@ fun TionTopAppBar(
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     title: @Composable () -> Unit,
 ) {
-    CenterAlignedTopAppBar(
+    TopAppBar(
         title = title,
         colors = colors,
         modifier = modifier,
@@ -36,8 +37,8 @@ fun TionTopAppBar(
 
 @Composable
 fun TionTopAppBarBack(
-    navigationIcon: ImageVector,
-    navigationIconContentDescription: String,
+    navigationIcon: ImageVector = Icons.Rounded.ArrowBack,
+    navigationIconContentDescription: String = "ArrowBack",
     onNavigationClick: () -> Unit,
     modifier: Modifier = Modifier,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
@@ -75,7 +76,6 @@ private fun TionTopAppBarPreview() {
                 title = {
                     Text(text = "Title")
                 },
-                modifier = Modifier,
             )
         }
     }
@@ -94,9 +94,6 @@ private fun TionTopAppBarBackPreview() {
                 title = {
                     Text(text = "Title")
                 },
-                modifier = Modifier,
-                navigationIcon = Icons.Rounded.ArrowBack,
-                navigationIconContentDescription = "",
                 onNavigationClick = { },
             )
         }

@@ -3,6 +3,9 @@ package com.example.androidblossomingchildren.util.component
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -19,10 +22,13 @@ import com.example.androidblossomingchildren.util.theme.TionTheme
 @Composable
 fun TionButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
+        .height(75.dp)
+        .fillMaxWidth()
+        .padding(horizontal = 56.dp),
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    shape: Shape = ButtonDefaults.shape,
+    shape: Shape = RoundedCornerShape(10.dp),
     content: @Composable RowScope.() -> Unit,
 ) {
     Button(
@@ -34,8 +40,8 @@ fun TionButton(
         ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            disabledContentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            disabledContentColor = MaterialTheme.colorScheme.onPrimary,
         ),
         contentPadding = contentPadding,
         content = content,
@@ -53,14 +59,12 @@ private fun TionButtonPreview() {
                 TionButton(
                     onClick = { },
                     enabled = false,
-                    shape = RoundedCornerShape(10.dp),
                     content = { Text("Test Button") },
                 )
 
                 TionButton(
                     onClick = { },
                     enabled = true,
-                    shape = RoundedCornerShape(10.dp),
                     content = { Text("Test Button") },
                 )
             }
