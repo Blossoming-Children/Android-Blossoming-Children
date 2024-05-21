@@ -30,9 +30,9 @@ fun RowScope.TionNavigationBarItem(
         enabled = enabled,
         colors =
         NavigationBarItemDefaults.colors(
-            indicatorColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            selectedIconColor = MaterialTheme.colorScheme.secondaryContainer,
-            unselectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+            selectedIconColor = MaterialTheme.colorScheme.primary,
+            unselectedIconColor = MaterialTheme.colorScheme.onTertiary,
         ),
     )
 }
@@ -44,8 +44,8 @@ fun TionNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.surface,
         content = content,
     )
 }
