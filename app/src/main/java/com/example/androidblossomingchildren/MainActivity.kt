@@ -10,6 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.androidblossomingchildren.ui.components.TionBottomModalName
+import com.example.androidblossomingchildren.ui.components.TionButtonModalStamp
+import com.example.androidblossomingchildren.ui.components.TionModal
+import com.example.androidblossomingchildren.ui.theme.TionTheme
 import com.example.androidblossomingchildren.util.theme.TionTheme
 
 class MainActivity : ComponentActivity() {
