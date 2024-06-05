@@ -30,17 +30,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.androidblossomingchildren.R
-import com.example.androidblossomingchildren.ui.theme.Blue_dark
-import com.example.androidblossomingchildren.ui.theme.Gray02
-import com.example.androidblossomingchildren.ui.theme.Gray03
-import com.example.androidblossomingchildren.ui.theme.Green02
+import com.example.androidblossomingchildren.util.theme.Black500
+import com.example.androidblossomingchildren.util.theme.Blue750
+import com.example.androidblossomingchildren.util.theme.Green600
 
 @Composable
 fun TionButtonModalStamp() {
     var showBottomSheet by remember { mutableStateOf(false) }
     var inputText by remember { mutableStateOf("") }
     var iconResId by remember { mutableStateOf(R.drawable.settings_name) }
-    var iconColor by remember { mutableStateOf(Gray03) }
+    var iconColor by remember { mutableStateOf(Black500) }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopEnd) {
         IconButton(
@@ -61,7 +60,7 @@ fun TionButtonModalStamp() {
                 inputText = inputText,
                 onInputTextChange = { newText -> inputText = newText },
                 onIconChange = { newIcon -> iconResId = newIcon },
-                onIconColorChange = { newColor -> iconColor = newColor }
+                onIconColorChange = { newColor -> iconColor = newColor },
             )
         }
     }
@@ -90,7 +89,7 @@ fun BottomSheetStampDialog(
                     text = "목표",
                     fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
                     style = MaterialTheme.typography.headlineMedium.copy(
-                        color = Blue_dark,
+                        color = Blue750,
                         textAlign = TextAlign.Center,
                     ),
                     modifier = Modifier
@@ -103,21 +102,21 @@ fun BottomSheetStampDialog(
                     placeholder = {
                         Text(
                             text = "여기에 입력해 주세요.",
-                            color = Gray03,
+                            color = MaterialTheme.colorScheme.tertiary,
                             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Gray02,
-                        unfocusedBorderColor = Gray02,
+                        focusedBorderColor = MaterialTheme.colorScheme.onTertiary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onTertiary,
                     ),
                 )
                 Button(
                     onClick = {
                         onDismissRequest()
                         onIconChange(R.drawable.check_circle)
-                        onIconColorChange(Green02)
+                        onIconColorChange(Green600)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -133,7 +132,6 @@ fun BottomSheetStampDialog(
         }
     }
 }
-
 
 @Composable
 fun TionBottomModalName() {
@@ -174,7 +172,7 @@ fun BottomSheetNameDialog(
                     text = "닉네임",
                     fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
                     style = MaterialTheme.typography.headlineMedium.copy(
-                        color = Blue_dark,
+                        color = Blue750,
                         textAlign = TextAlign.Center,
                     ),
                     modifier = Modifier
@@ -187,14 +185,14 @@ fun BottomSheetNameDialog(
                     placeholder = {
                         Text(
                             text = "여기에 입력해 주세요.",
-                            color = Gray03,
+                            color = MaterialTheme.colorScheme.tertiary,
                             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Gray02,
-                        unfocusedBorderColor = Gray02,
+                        focusedBorderColor = MaterialTheme.colorScheme.onTertiary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.onTertiary,
                     ),
                 )
                 Button(

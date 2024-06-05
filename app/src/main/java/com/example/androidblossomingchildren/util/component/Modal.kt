@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.androidblossomingchildren.R
-import com.example.androidblossomingchildren.ui.theme.Red
 import com.example.androidblossomingchildren.util.component.TionBackground
 import com.example.androidblossomingchildren.util.component.TionButton
 import com.example.androidblossomingchildren.util.theme.TionTheme
@@ -51,13 +51,13 @@ fun TionModal(
         }
     }
 
-
     if (openDialog.value) {
         Dialog(onDismissRequest = { openDialog.value = false }) {
             TionBackground(
                 modifier = Modifier
                     .size(300.dp)
-                    .clip(RoundedCornerShape(16.dp))) {
+                    .clip(RoundedCornerShape(16.dp)),
+            ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.Center,
@@ -94,7 +94,7 @@ fun TionModal(
                         )
                         Text(
                             text = buildAnnotatedString {
-                                withStyle(style = SpanStyle(color = Red)) {
+                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
                                     append("다시")
                                 }
                                 append(" 해볼까요")
@@ -114,7 +114,8 @@ fun TionModal(
             TionBackground(
                 modifier = Modifier
                     .size(300.dp)
-                    .clip(RoundedCornerShape(16.dp))) {
+                    .clip(RoundedCornerShape(16.dp)),
+            ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.Center,
@@ -128,7 +129,7 @@ fun TionModal(
                     Text(
                         text = buildAnnotatedString {
                             append("모든 동작 ")
-                            withStyle(style = SpanStyle(color = Red)) {
+                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
                                 append("완료")
                             }
                             append("!")
