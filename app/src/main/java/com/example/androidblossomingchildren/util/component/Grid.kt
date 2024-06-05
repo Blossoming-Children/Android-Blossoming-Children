@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren.components
+package com.example.androidblossomingchildren.util.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

@@ -28,16 +28,16 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.androidblossomingchildren.components.TionGrid
-import com.example.androidblossomingchildren.ui.theme.AndroidBlossomingChildrenTheme
+import com.example.androidblossomingchildren.util.component.TionGrid
 import com.example.androidblossomingchildren.ui.theme.Blue
+import com.example.androidblossomingchildren.util.theme.TionTheme
 
 
 class StudyActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AndroidBlossomingChildrenTheme {
+            TionTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
