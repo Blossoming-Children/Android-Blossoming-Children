@@ -43,9 +43,9 @@ fun TionModal(
     val openDialog = remember { mutableStateOf(true) }
     val showOnce = remember { mutableStateOf(false) }
 
-    if (accuracy < 0.8f) {
+    if (!isLastPage && accuracy < 0.8f) {
         LaunchedEffect(Unit) {
-            delay(5000L)
+            delay(3000L)
             showOnce.value = true
             onDismiss()
         }
@@ -63,7 +63,36 @@ fun TionModal(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    if (accuracy >= 0.8f || showOnce.value) {
+                    if (isLastPage) {
+                        Image(
+                            painter = painterResource(id = R.drawable.character),
+                            contentDescription = "Complete",
+                            modifier = Modifier.size(128.dp),
+                        )
+                        Text(
+                            text = buildAnnotatedString {
+                                append("모든 동작 ")
+                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
+                                    append("완료")
+                                }
+                                append("!")
+                            },
+                            modifier = Modifier.padding(8.dp),
+                            fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
+                            fontSize = 25.sp,
+                        )
+                        TionButton(
+                            onClick = { onDismiss() },
+                            modifier = Modifier.width(200.dp),
+                            shape = RoundedCornerShape(10.dp),
+                            content = {
+                                Text(
+                                    text = "완료",
+                                    fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
+                                )
+                            },
+                        )
+                    } else if (accuracy >= 0.8f || showOnce.value) {
                         Image(
                             painter = painterResource(id = R.drawable.character_good),
                             modifier = Modifier.size(128.dp),
@@ -76,7 +105,7 @@ fun TionModal(
                             fontSize = 25.sp,
                         )
                         TionButton(
-                            onClick = { /* event 처리 */ },
+                            onClick = { onDismiss() },
                             modifier = Modifier.width(200.dp),
                             shape = RoundedCornerShape(10.dp),
                             content = {
@@ -108,65 +137,21 @@ fun TionModal(
             }
         }
     }
-
-    if (isLastPage) {
-        Dialog(onDismissRequest = { openDialog.value = false }) {
-            TionBackground(
-                modifier = Modifier
-                    .size(300.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.character),
-                        contentDescription = "Complete",
-                        modifier = Modifier.size(128.dp),
-                    )
-                    Text(
-                        text = buildAnnotatedString {
-                            append("모든 동작 ")
-                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
-                                append("완료")
-                            }
-                            append("!")
-                        },
-                        modifier = Modifier.padding(8.dp),
-                        fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
-                        fontSize = 25.sp,
-                    )
-                    TionButton(
-                        onClick = { /* event 처리 */ },
-                        modifier = Modifier.width(200.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        content = {
-                            Text(
-                                text = "완료",
-                                fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
-                            )
-                        },
-                    )
-                }
-            }
-        }
-    }
 }
 
-@Preview
+@Preview(apiLevel = 27)
 @Composable
 private fun TionModalPreview() {
     TionTheme {
         TionBackground(
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier
+                .size(200.dp),
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 TionModal(
-                    accuracy = 0.75f,
+                    accuracy = 0.5f,
                     onDismiss = { },
-                    isLastPage = false,
+                    isLastPage = true,
                 )
             }
         }
