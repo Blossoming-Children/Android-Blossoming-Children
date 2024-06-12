@@ -9,7 +9,10 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
 import com.example.androidblossomingchildren.util.ThemePreviews
+import com.example.androidblossomingchildren.util.base.Destinations
+import com.example.androidblossomingchildren.util.base.navigateSingleTopTo
 import com.example.androidblossomingchildren.util.icon.TionIcons
 import com.example.androidblossomingchildren.util.theme.TionTheme
 
@@ -50,6 +53,47 @@ fun TionNavigationBar(
     )
 }
 
+@Composable
+fun RowScope.TionNavigationBarContent(
+    currentScreen: Destinations,
+    navController: NavHostController,
+) {
+    val items = listOf("Home", "Stamp", "MyPage")
+    val icons =
+        listOf(
+            TionIcons.Home,
+            TionIcons.Stamp,
+            TionIcons.MyPage,
+        )
+    val selectedIcons =
+        listOf(
+            TionIcons.HomeSelected,
+            TionIcons.StampSelected,
+            TionIcons.MyPageSelected,
+        )
+
+    items.forEachIndexed { index, _ ->
+        TionNavigationBarItem(
+            selected = currentScreen.route == items[index],
+            onClick = {
+                navController.navigateSingleTopTo(items[index])
+            },
+            icon = {
+                Icon(
+                    painterResource(id = icons[index]),
+                    contentDescription = null,
+                )
+            },
+            selectedIcon = {
+                Icon(
+                    painterResource(id = selectedIcons[index]),
+                    contentDescription = null,
+                )
+            },
+        )
+    }
+}
+
 @ThemePreviews
 @Composable
 private fun TionNavigationBarPreview() {
@@ -60,7 +104,6 @@ private fun TionNavigationBarPreview() {
             TionIcons.Stamp,
             TionIcons.MyPage,
         )
-
     val selectedIcons =
         listOf(
             TionIcons.HomeSelected,
