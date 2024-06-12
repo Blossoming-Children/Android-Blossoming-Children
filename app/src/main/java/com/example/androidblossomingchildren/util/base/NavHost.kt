@@ -56,7 +56,12 @@ fun TionNavigationGraph(
             StampScreen(navController)
         }
         composable(Destinations.MyPage.route) {
-            MyPageScreen(navController)
+            MyPageScreen(
+                onNavigateToDetail = { videoId ->
+                    navController.navigateToSingleVideo(navController, videoId.toString())
+                },
+                navController = navController,
+            )
         }
         composable(Destinations.Video.route) {
             VideoScreen(
