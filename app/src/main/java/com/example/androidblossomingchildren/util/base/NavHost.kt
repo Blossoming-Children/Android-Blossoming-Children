@@ -22,6 +22,7 @@ fun TionNavigationGraph(
     navController: NavHostController = rememberNavController(),
 ) {
     val isFirstLogin = true
+
     NavHost(
         navController = navController,
         startDestination = Destinations.OnBoarding.route,
@@ -82,6 +83,7 @@ fun TionNavigationGraph(
             VideoDetailScreen(
                 backStackEntry.arguments?.getString("videoId").toString(),
                 onNavigateToBack = { navController.popBackStack() },
+                navController = navController,
             )
         }
     }
