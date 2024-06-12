@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.androidblossomingchildren.Destinations
+import com.example.androidblossomingchildren.util.base.Destinations
 import com.example.androidblossomingchildren.util.component.TionButton
 import com.example.androidblossomingchildren.util.component.TionNavigationBar
 import com.example.androidblossomingchildren.util.component.TionNavigationBarContent

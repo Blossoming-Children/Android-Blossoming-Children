@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren
+package com.example.androidblossomingchildren.util.base
 
 enum class Destinations(
     val route: String,

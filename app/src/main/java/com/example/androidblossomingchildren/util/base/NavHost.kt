@@ -1,4 +1,4 @@
-package com.example.androidblossomingchildren
+package com.example.androidblossomingchildren.util.base
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
