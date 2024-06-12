@@ -47,7 +47,7 @@ fun TionNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = MaterialTheme.colorScheme.onPrimary,
         contentColor = MaterialTheme.colorScheme.surface,
         content = content,
     )
