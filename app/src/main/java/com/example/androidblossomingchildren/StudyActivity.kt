@@ -1,6 +1,5 @@
 package com.example.androidblossomingchildren
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -21,17 +20,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.androidblossomingchildren.util.component.TionGrid
-import com.example.androidblossomingchildren.ui.theme.Blue
+import com.example.androidblossomingchildren.util.component.TionGridItem
 import com.example.androidblossomingchildren.util.theme.TionTheme
-
 
 class StudyActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +46,6 @@ class StudyActivity : ComponentActivity() {
     }
 }
 
-
 /*
 @Composable
 fun StudyActivity(){
@@ -64,8 +60,6 @@ fun StudyActivity(){
 }
 */
 
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun StudyScreen(activity: ComponentActivity) {
     val context = LocalContext.current
@@ -83,7 +77,7 @@ fun StudyScreen(activity: ComponentActivity) {
                 modifier = Modifier.padding(padding),
             ) {
                 items(itemList) { item ->
-                    TionGrid(
+                    TionGridItem(
                         item,
                         onClick = {
                             Intent(context, StudyDetailActivity::class.java).apply {
@@ -114,7 +108,7 @@ fun StudyTopAppBar(onBackClicked: () -> Unit) {
             Text(
                 text = "동작 교육",
                 fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
-                color = Blue,
+                color = MaterialTheme.colorScheme.primary,
                 fontSize = 20.sp,
             )
         },
