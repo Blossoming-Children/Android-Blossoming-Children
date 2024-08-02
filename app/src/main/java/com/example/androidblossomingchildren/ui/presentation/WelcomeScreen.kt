@@ -31,11 +31,13 @@ fun WelcomeScreen(
                 .padding(top = 100.dp, bottom = 45.dp),
         ) {
             Box(
-                modifier = Modifier.size(225.dp),
+                modifier = Modifier
+                    .size(225.dp),
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.img_main_character),
                     contentDescription = "Main Character",
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
             TionButton(

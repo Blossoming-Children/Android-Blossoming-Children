@@ -192,6 +192,8 @@ fun MyPageScreen(
                         onClick = {
                             onNavigateToDetail(item)
                         },
+                        modifier = Modifier
+                            .size(200.dp)
                     )
                 }
             }

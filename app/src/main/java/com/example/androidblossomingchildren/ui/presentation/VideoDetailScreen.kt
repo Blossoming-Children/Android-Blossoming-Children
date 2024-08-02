@@ -3,7 +3,9 @@
 package com.example.androidblossomingchildren.ui.presentation
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -18,9 +20,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -45,14 +47,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import com.example.androidblossomingchildren.R
+import com.example.androidblossomingchildren.StudyResultActivity
+import com.example.androidblossomingchildren.ui.components.TionModal
 import com.example.androidblossomingchildren.util.component.TionButton
 import com.example.androidblossomingchildren.util.component.TionTopAppBarBack
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun VideoDetailScreen(
@@ -62,6 +68,22 @@ fun VideoDetailScreen(
 ) {
     val currentPage = remember { mutableStateOf(0) }
     val totalPages = 4
+    val activity = LocalContext.current as ComponentActivity
+    Log.d("Activity", activity.toString())
+    val showModal = remember { mutableStateOf(false) }
+    val modalAccuracy = remember { mutableStateOf(0.8f) }
+
+    LaunchedEffect(currentPage.value) {
+        if (currentPage.value == 2) {
+            modalAccuracy.value = 0.5f
+            delay(5000L)
+            showModal.value = true
+        } else if (currentPage.value > 0 && !showModal.value) {
+            modalAccuracy.value = 0.8f
+            delay(5000L)
+            showModal.value = true
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -73,6 +95,33 @@ fun VideoDetailScreen(
             )
         },
         content = { padding ->
+            if (showModal.value) {
+                TionModal(
+                    accuracy = modalAccuracy.value,
+                    isLastPage = currentPage.value == totalPages,
+                    onDismiss = {
+                        if (currentPage.value == totalPages) {
+                            val intent = Intent(activity, StudyResultActivity::class.java)
+                            intent.putExtra("ITEM_TEXT", videoId)
+                            activity.startActivity(intent)
+                        } else if (currentPage.value == 2 && modalAccuracy.value == 0.5f) {
+                            modalAccuracy.value = 0.8f
+                            showModal.value = false
+
+                            activity.lifecycleScope.launch {
+                                delay(5000L)
+                                showModal.value = true
+                            }
+                        } else {
+                            if (currentPage.value < totalPages) {
+                                currentPage.value++
+                                showModal.value = false
+                            }
+                        }
+                    },
+                )
+            }
+
             Column(
                 Modifier
                     .padding(padding)
@@ -101,40 +150,72 @@ fun VideoDetailScreen(
 
                         when (currentPage.value) {
                             0 -> {
-                                // YouTubePlayer(youtubeVideoId = "4SYi6EBeAr8", lifecycleOwner = activity)
-                                DescriptionTexts()
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                                ) {
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalArrangement = Arrangement.Top,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        VideoView(videoUri = R.raw.studyvideo)
+                                    }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        DescriptionTexts()
+                                    }
+                                }
                             }
-                            else -> {
-//                                YouTubePlayer(
-//                                    youtubeVideoId = "4SYi6EBeAr8",
-//                                    lifecycleOwner = activity,
-//                                    modifier = Modifier
-//                                        .fillMaxWidth()
-//                                        .aspectRatio(16 / 9f)
-//                                )
-//                                CameraXPreview(activity = activity)
+                            1 -> {
+                                VideoView(videoUri = R.raw.walking)
+                                CameraXPreview(activity = activity)
+                            }
+                            2 -> {
+                                VideoView(videoUri = R.raw.clap)
+                                CameraXPreview(activity = activity)
+                            }
+                            3 -> {
+                                VideoView(videoUri = R.raw.hurray)
+                                CameraXPreview(activity = activity)
+                            }
+                            4 -> {
+                                VideoView(videoUri = R.raw.jumping)
+                                CameraXPreview(activity = activity)
                             }
                         }
                     }
                 }
-
-                TionButton(
-                    onClick = {
-                        if (currentPage.value < totalPages) {
-                            currentPage.value++
-                        }
-                    },
-                    content = {
-                        Text(
-                            text = if (currentPage.value == totalPages) "완료" else "다음",
-                            fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
-                            fontSize = 20.sp,
-                        )
-                    },
-                    modifier = Modifier
-                        .padding(32.dp)
-                        .width(300.dp),
-                )
+            }
+            if (currentPage.value == 0) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    TionButton(
+                        onClick = {
+                            if (currentPage.value < totalPages) {
+                                currentPage.value++
+                            }
+                        },
+                        content = {
+                            Text(
+                                text = "다음",
+                                fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
+                                fontSize = 20.sp,
+                            )
+                        },
+                        modifier = Modifier
+                            .padding(32.dp)
+                            .width(300.dp)
+                            .height(75.dp)
+                    )
+                }
             }
         },
     )
@@ -142,52 +223,31 @@ fun VideoDetailScreen(
 
 @Composable
 fun DescriptionTexts() {
-    Column(horizontalAlignment = Alignment.Start) {
+    Column(
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
         Text(
-            text = "1. 1번 설명입니다.1",
-            fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
-            fontSize = 30.sp,
-            modifier = Modifier.padding(top = 50.dp),
-        )
-        Text(
-            text = "2. 2번 설명입니다.22",
+            text = "1. 걷기",
             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
             fontSize = 30.sp,
         )
         Text(
-            text = "3. 3번 설명입니다.333",
+            text = "2. 손뼉 치기",
             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
             fontSize = 30.sp,
         )
         Text(
-            text = "4. 4번 설명입니다.4444",
+            text = "3. 만세!",
+            fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
+            fontSize = 30.sp,
+        )
+        Text(
+            text = "4. 한 발 들고 뛰기",
             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
             fontSize = 30.sp,
         )
     }
-}
-
-@Composable
-fun YouTubePlayer(youtubeVideoId: String, lifecycleOwner: LifecycleOwner, modifier: Modifier = Modifier) {
-    AndroidView(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clip(RoundedCornerShape(10.dp)),
-        factory = {
-            YouTubePlayerView(context = it).apply {
-                lifecycleOwner.lifecycle.addObserver(this)
-
-                addYouTubePlayerListener(
-                    object : AbstractYouTubePlayerListener() {
-                        override fun onReady(youTubePlayer: YouTubePlayer) {
-                            youTubePlayer.cueVideo(youtubeVideoId, 0f)
-                        }
-                    },
-                )
-            }
-        },
-    )
 }
 
 @Composable
@@ -249,9 +309,7 @@ fun CameraXPreview(activity: ComponentActivity) {
                 previewView
             },
             modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .padding(top = 16.dp)
+                .fillMaxSize()
                 .clipToBounds(),
         )
     }
@@ -265,5 +323,30 @@ fun Indicator(isSelected: Boolean) {
             .size(10.dp)
             .clip(CircleShape)
             .background(if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onTertiary),
+    )
+}
+
+@Composable
+fun VideoView(videoUri: Int) {
+    val context = LocalContext.current
+    val videoUri = Uri.parse("android.resource://${context.packageName}/$videoUri")
+
+    AndroidView(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clip(RoundedCornerShape(10.dp)),
+        factory = {
+            val exoPlayer = ExoPlayer.Builder(context).build().apply {
+                val mediaItem = MediaItem.fromUri(videoUri)
+                setMediaItem(mediaItem)
+                prepare()
+                playWhenReady = false
+            }
+
+            PlayerView(context).apply {
+                player = exoPlayer
+            }
+        }
     )
 }
