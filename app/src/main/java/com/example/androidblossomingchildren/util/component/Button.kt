@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,7 +41,7 @@ fun TionButton(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            disabledContentColor = MaterialTheme.colorScheme.onPrimary,
+            disabledContentColor = MaterialTheme.colorScheme.onSurface,
         ),
         contentPadding = contentPadding,
         content = content,
@@ -53,7 +53,9 @@ fun TionButton(
 private fun TionButtonPreview() {
     TionTheme {
         TionBackground(
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier
+                .height(150.dp)
+                .width(300.dp),
         ) {
             Column {
                 TionButton(

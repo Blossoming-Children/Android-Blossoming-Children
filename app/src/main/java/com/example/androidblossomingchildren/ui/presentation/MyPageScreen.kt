@@ -91,7 +91,6 @@ fun MyPageScreen(
                     .fillMaxWidth()
                     .height(270.dp)
                     .background(MaterialTheme.colorScheme.primary),
-
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -179,7 +178,7 @@ fun MyPageScreen(
                     ),
             )
 
-            val itemList = List(20) { "제목 ${it + 1}" }
+            val itemList = List(20) { "영상 ${it + 1}" }
             LazyHorizontalGrid(
                 rows = GridCells.Fixed(1),
                 contentPadding = PaddingValues(all = 16.dp),
@@ -198,7 +197,7 @@ fun MyPageScreen(
             Text(
                 text = "로그아웃",
                 color = MaterialTheme.colorScheme.tertiary,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(
@@ -209,12 +208,12 @@ fun MyPageScreen(
             Text(
                 text = "회원 탈퇴",
                 color = MaterialTheme.colorScheme.tertiary,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(
                         start = 25.dp,
-                        top = 10.dp,
+                        top = 15.dp,
                         bottom = 160.dp,
                     ),
             )

@@ -139,7 +139,7 @@ fun TionModal(
     }
 }
 
-@Preview(apiLevel = 27)
+@Preview
 @Composable
 private fun TionModalPreview() {
     TionTheme {
