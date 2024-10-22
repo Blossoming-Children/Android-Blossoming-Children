@@ -86,4 +86,8 @@ dependencies {
     implementation ("androidx.camera:camera-camera2:1.3.3")
     implementation ("androidx.camera:camera-lifecycle:1.3.3")
     implementation ("androidx.camera:camera-view:1.3.3")
+
+    // Media3
+    implementation("androidx.media3:media3-exoplayer:1.1.1")
+    implementation("androidx.media3:media3-ui:1.1.1")
 }
