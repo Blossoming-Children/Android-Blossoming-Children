@@ -14,6 +14,7 @@ import com.example.androidblossomingchildren.ui.presentation.MyPageScreen
 import com.example.androidblossomingchildren.ui.presentation.OnBoardingScreen
 import com.example.androidblossomingchildren.ui.presentation.StampScreen
 import com.example.androidblossomingchildren.ui.presentation.VideoDetailScreen
+import com.example.androidblossomingchildren.ui.presentation.VideoResultScreen
 import com.example.androidblossomingchildren.ui.presentation.VideoScreen
 import com.example.androidblossomingchildren.ui.presentation.WelcomeScreen
 
@@ -73,7 +74,7 @@ fun TionNavigationGraph(
             )
         }
         composable(
-            route = "video/{videoId}",
+            route = "${Destinations.Video.route}/{videoId}",
             arguments = listOf(
                 navArgument("videoId") {
                     type = NavType.StringType
@@ -82,8 +83,24 @@ fun TionNavigationGraph(
         ) { backStackEntry ->
             VideoDetailScreen(
                 backStackEntry.arguments?.getString("videoId").toString(),
+                onNavigateToResult = { videoId ->
+                    navController.navigate("${Destinations.Video.route}/$videoId/result") { launchSingleTop = true }
+                },
                 onNavigateToBack = { navController.popBackStack() },
-                navController = navController,
+            )
+        }
+        composable(
+            route = "${Destinations.Video.route}/{videoId}/result",
+            arguments = listOf(
+                navArgument("videoId") {
+                    type = NavType.StringType
+                },
+            ),
+        ) { backStackEntry ->
+            VideoResultScreen(
+                backStackEntry.arguments?.getString("videoId").toString(),
+                onNavigateToStamp = { navController.navigateSingleTopTo(Destinations.Stamp.route) },
+                onNavigateToBack = { navController.popBackStack() },
             )
         }
     }
