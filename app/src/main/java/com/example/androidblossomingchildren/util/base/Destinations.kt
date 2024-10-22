@@ -10,15 +10,15 @@ enum class Destinations(
         route = "Welcome",
     ),
     Home(
-        route = "Home",
+        route = "홈",
     ),
     Stamp(
-        route = "Stamp",
+        route = "도장판",
     ),
     MyPage(
-        route = "MyPage",
+        route = "마이페이지",
     ),
     Video(
-        route = "Video",
+        route = "동작 교육",
     ),
 }
