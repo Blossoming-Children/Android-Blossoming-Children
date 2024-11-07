@@ -1,5 +1,6 @@
 package com.example.androidblossomingchildren.ui.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,39 +10,41 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.util.component.TionButton
-import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onNavigateToHome: () -> Unit,
+    onNavigateToAccountFind: () -> Unit,
+    onNavigateToSignUp: () -> Unit,
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    val isButtonEnabled by remember { derivedStateOf { email.isNotEmpty() && password.isNotEmpty() } }
 
     Column(
         modifier = Modifier
@@ -101,28 +104,23 @@ fun LoginScreen() {
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 val image = if (passwordVisible) {
-                    Icons.Filled.Favorite
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_visibility),
+                        modifier = Modifier.size(25.dp),
+                        contentDescription = "visible",
+                    )
                 } else {
-                    Icons.Filled.FavoriteBorder
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_visibility_off),
+                        modifier = Modifier.size(25.dp),
+                        contentDescription = "invisible",
+                    )
                 }
-
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector = image, contentDescription = "Toggle Password Visibility")
+                    image
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 비밀번호 찾기 텍스트
-        Text(
-            text = "비밀번호 찾기",
-            fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
-            color = MaterialTheme.colorScheme.tertiary,
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable { /* 비밀번호 찾기 로직 */ },
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -132,11 +130,20 @@ fun LoginScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp),
-            onClick = { },
+            onClick = {
+                // if(!CheckEmailForm())
+                //  Toast Message: 이메일 형식으로 입력해주세요
+                // else if(CheckAccount())
+                onNavigateToHome()
+                // else
+                //  Toast Message: 계정이 올바르지 않습니다
+            },
+            enabled = isButtonEnabled, // 이메일이 비어 있으면 비활성화
             content = {
                 Text(
                     text = "로그인",
                     fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.surface,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
                 )
@@ -151,26 +158,35 @@ fun LoginScreen() {
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = "이메일 찾기",
+                text = "계정 찾기",
                 fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
                 color = MaterialTheme.colorScheme.tertiary,
-                modifier = Modifier.clickable { /* 이메일 찾기 로직 */ },
+                modifier = Modifier.clickable {
+                    onNavigateToAccountFind()
+                },
             )
             Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = "회원가입",
                 fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
                 color = MaterialTheme.colorScheme.tertiary,
-                modifier = Modifier.clickable { /* 회원가입 로직 */ },
+                modifier = Modifier.clickable {
+                    onNavigateToSignUp()
+                },
             )
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    TionTheme {
-        LoginScreen()
-    }
+fun CheckEmailForm() {
+    // if(이메일 형식일 경우)
+    //      return true  // Toast Message: 이메일 형식으로 작성해주세요
+    // else
+    //      return false
+}
+fun CheckAccount() {
+//      if(계정이 존재할 경우)
+//          onNavigateToHome()  // 계정 정보 넘겨주기
+//      else
+//          Toast Message: 계정이 존재하지 않습니다
 }

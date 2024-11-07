@@ -22,15 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.util.component.TionButton
-import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    onNavigateToSignUpVerification: () -> Unit,
+) {
     var email by remember { mutableStateOf("") }
     val isButtonEnabled by remember { derivedStateOf { email.isNotEmpty() } }
 
@@ -104,7 +104,14 @@ fun SignUpScreen() {
 
         // "다음" 버튼
         TionButton(
-            onClick = { /* 다음 단계로 진행하는 로직 */ },
+            onClick = {
+                // if(!CheckEmailForm())
+                //  Toast Message: 이메일 형식으로 입력해주세요
+                // else if(CheckAccount())
+                //  Toast Message: 이미 존재하는 이메일입니다
+                // else
+                onNavigateToSignUpVerification()
+            },
             enabled = isButtonEnabled, // 이메일이 비어 있으면 비활성화
             modifier = Modifier
                 .fillMaxWidth()
@@ -117,13 +124,5 @@ fun SignUpScreen() {
                 color = MaterialTheme.colorScheme.surface,
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignUpScreenPreview() {
-    TionTheme {
-        SignUpScreen()
     }
 }

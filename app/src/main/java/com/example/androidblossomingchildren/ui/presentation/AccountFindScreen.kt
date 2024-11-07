@@ -31,17 +31,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.util.component.TionButton
 import com.example.androidblossomingchildren.util.component.TionTopAppBarBack
-import com.example.androidblossomingchildren.util.theme.TionTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun AccountFindScreen() {
+fun AccountFindScreen(
+    onNavigateToPasswordReset: () -> Unit,
+    onNavigateToBack: () -> Unit,
+) {
     var selectedTab by remember { mutableStateOf(0) } // 0: 아이디 찾기, 1: 비밀번호 찾기
     var email by remember { mutableStateOf("") }
     var isAccountFound by remember { mutableStateOf(false) }
@@ -79,7 +80,7 @@ fun AccountFindScreen() {
                 },
                 modifier = Modifier
                     .padding(vertical = 15.dp),
-                onNavigationClick = {},
+                onNavigationClick = onNavigateToBack,
             )
         },
     ) {
@@ -156,16 +157,18 @@ fun AccountFindScreen() {
                         // "계정 찾기" 버튼
                         TionButton(
                             onClick = {
-                                if (email.isNotEmpty()) {
-                                    // 계정 찾기 로직 (여기서는 가상으로 처리)
-                                    isAccountFound = true
-                                    accountInfo = "$email 계정이 존재합니다"
-                                }
+                                // 계정 찾기 로직 (여기서는 가상으로 처리)
+                                // if(CheckAccount()의 return 값이 true)
+                                isAccountFound = true
+                                accountInfo = "$email 계정이 존재합니다"
+                                // else
+                                //  isAccountFound = true
+                                //  accountInfo = "$email 계정이 존재하지 않습니다"
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(50.dp),
-                            enabled = true, // email.isNotEmpty(),
+                            enabled = email.isNotEmpty(),
                         ) {
                             Text(
                                 text = if (selectedTab == 0) "계정 찾기" else "비밀번호 찾기",
@@ -196,6 +199,7 @@ fun AccountFindScreen() {
             } else if (selectedTab == 1) {
                 // 비밀번호 찾기 화면
                 Column {
+                    Spacer(modifier = Modifier.height(30.dp))
                     Text(
                         text = "이메일 인증 후\n비밀번호를 재설정 할 수 있어요",
                         fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
@@ -228,11 +232,9 @@ fun AccountFindScreen() {
                         // "인증번호 받기" 버튼
                         TionButton(
                             onClick = {
-                                if (email.isNotEmpty()) {
-                                    isCodeSent = true
-                                    timer = 60 // 타이머 초기화
-                                    canResendCode = false
-                                }
+                                isCodeSent = true
+                                timer = 60 // 타이머 초기화
+                                canResendCode = false
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -279,6 +281,7 @@ fun AccountFindScreen() {
                             )
 
                             // "다시 받기" 버튼
+                            /* 로직 구현 아직 안 됨 */
                             TionButton(
                                 onClick = {
                                     if (canResendCode) {
@@ -303,7 +306,7 @@ fun AccountFindScreen() {
                         // "확인" 버튼
                         TionButton(
                             onClick = {
-                                /* 인증번호 확인 로직 */
+                                onNavigateToPasswordReset()
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -321,13 +324,5 @@ fun AccountFindScreen() {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AccountFindScreenPreview() {
-    TionTheme {
-        AccountFindScreen()
     }
 }

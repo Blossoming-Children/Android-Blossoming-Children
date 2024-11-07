@@ -1,5 +1,6 @@
 package com.example.androidblossomingchildren.ui.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,12 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -27,21 +25,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.util.component.TionButton
-import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
-fun SignUpPasswordScreen() {
+fun SignUpPasswordScreen(
+    onNavigateToSignUpComplete: () -> Unit,
+) {
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -130,8 +129,19 @@ fun SignUpPasswordScreen() {
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        val icon = if (passwordVisible) Icons.Default.Favorite else Icons.Default.FavoriteBorder
-                        Icon(imageVector = icon, contentDescription = null)
+                        if (passwordVisible) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_visibility),
+                                modifier = Modifier.size(25.dp),
+                                contentDescription = "visible",
+                            )
+                        } else {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_visibility_off),
+                                modifier = Modifier.size(25.dp),
+                                contentDescription = "invisible",
+                            )
+                        }
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -155,8 +165,19 @@ fun SignUpPasswordScreen() {
                 visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
-                        val icon = if (confirmPasswordVisible) Icons.Default.Favorite else Icons.Default.FavoriteBorder
-                        Icon(imageVector = icon, contentDescription = null)
+                        if (confirmPasswordVisible) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_visibility),
+                                modifier = Modifier.size(25.dp),
+                                contentDescription = "visible",
+                            )
+                        } else {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_visibility_off),
+                                modifier = Modifier.size(25.dp),
+                                contentDescription = "invisible",
+                            )
+                        }
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -195,7 +216,7 @@ fun SignUpPasswordScreen() {
 
         // "다음" 버튼
         TionButton(
-            onClick = { /* 다음 단계로 진행하는 로직 */ },
+            onClick = { onNavigateToSignUpComplete() },
             enabled = isButtonEnabled, // 비밀번호 유효성 확인
             modifier = Modifier
                 .fillMaxWidth()
@@ -208,13 +229,5 @@ fun SignUpPasswordScreen() {
                 color = MaterialTheme.colorScheme.surface,
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignUpPasswordScreenPreview() {
-    TionTheme {
-        SignUpPasswordScreen()
     }
 }

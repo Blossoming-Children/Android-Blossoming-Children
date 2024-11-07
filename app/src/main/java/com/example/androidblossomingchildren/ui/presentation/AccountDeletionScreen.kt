@@ -28,15 +28,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.util.component.TionTopAppBarBack
-import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
-fun AccountDeletionScreen() {
+fun AccountDeletionScreen(
+    onNavigateToBack: () -> Unit,
+) {
     var password by remember { mutableStateOf("") }
     var isAccountRight by remember { mutableStateOf(false) }
     var accountInfo by remember { mutableStateOf("") }
@@ -55,7 +55,7 @@ fun AccountDeletionScreen() {
                 },
                 modifier = Modifier
                     .padding(vertical = 15.dp),
-                onNavigationClick = {},
+                onNavigationClick = onNavigateToBack,
             )
         },
     ) {
@@ -68,7 +68,6 @@ fun AccountDeletionScreen() {
                 .padding(start = 25.dp, end = 25.dp),
         ) {
             if (!isAccountRight) {
-                // 이메일 입력 필드와 버튼 (계정 찾기 상태)
                 Column(
                     horizontalAlignment = Alignment.Start,
                 ) {
@@ -82,7 +81,6 @@ fun AccountDeletionScreen() {
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    // 이메일 입력 필드
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
@@ -100,11 +98,9 @@ fun AccountDeletionScreen() {
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    // "계정 찾기" 버튼
                     Button(
                         onClick = {
                             if (password.isNotEmpty()) {
-                                // 계정 찾기 로직 (여기서는 가상으로 처리)
                                 isAccountRight = true
                             }
                         },
@@ -113,7 +109,7 @@ fun AccountDeletionScreen() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
-                        enabled = true, // email.isNotEmpty(),
+                        enabled = true,
                     ) {
                         Text(
                             text = "회원 탈퇴",
@@ -124,7 +120,6 @@ fun AccountDeletionScreen() {
                     }
                 }
             } else {
-                // 계정 찾은 후 상태
                 Column(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.Start,
@@ -145,10 +140,10 @@ fun AccountDeletionScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun AccountDeletionScreenPreview() {
-    TionTheme {
-        AccountDeletionScreen()
-    }
-}
+// @Preview(showBackground = true)
+// @Composable
+// fun AccountDeletionScreenPreview() {
+//    TionTheme {
+//        AccountDeletionScreen()
+//    }
+// }

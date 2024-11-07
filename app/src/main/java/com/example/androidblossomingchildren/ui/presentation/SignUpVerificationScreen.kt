@@ -23,15 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.util.component.TionButton
-import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
-fun SignUpVerificationScreen() {
+fun SignUpVerificationScreen(
+    onNavigateToSignUpPassword: () -> Unit,
+) {
     var code by remember { mutableStateOf("") }
     val isButtonEnabled by remember { derivedStateOf { code.length == 6 } }
 
@@ -119,7 +119,7 @@ fun SignUpVerificationScreen() {
 
         // "다음" 버튼
         TionButton(
-            onClick = { /* 다음 단계로 진행하는 로직 */ },
+            onClick = { onNavigateToSignUpPassword() },
             enabled = isButtonEnabled, // 코드가 6자리가 아니면 비활성화
             modifier = Modifier
                 .fillMaxWidth()
@@ -132,13 +132,5 @@ fun SignUpVerificationScreen() {
                 color = MaterialTheme.colorScheme.surface,
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignUpVerificationScreenPreview() {
-    TionTheme {
-        SignUpVerificationScreen()
     }
 }

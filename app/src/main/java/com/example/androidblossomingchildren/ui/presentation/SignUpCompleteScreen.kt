@@ -21,15 +21,15 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.util.component.TionButton
-import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
-fun SignUpCompleteScreen() {
+fun SignUpCompleteScreen(
+    onNavigateToLogin: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +73,7 @@ fun SignUpCompleteScreen() {
         }
 
         Column(
-            modifier = Modifier.size(300.dp),
+            modifier = Modifier.size(320.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -97,7 +97,7 @@ fun SignUpCompleteScreen() {
 
         // "로그인 하기" 버튼
         TionButton(
-            onClick = { /* 로그인 화면으로 이동하는 로직 */ },
+            onClick = { onNavigateToLogin() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp),
@@ -112,10 +112,10 @@ fun SignUpCompleteScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun SignUpCompleteScreenPreview() {
-    TionTheme {
-        SignUpCompleteScreen()
-    }
-}
+// @Preview(showBackground = true)
+// @Composable
+// fun SignUpCompleteScreenPreview() {
+//    TionTheme {
+//        SignUpCompleteScreen()
+//    }
+// }
