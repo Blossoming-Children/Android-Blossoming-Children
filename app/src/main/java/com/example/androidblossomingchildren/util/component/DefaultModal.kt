@@ -2,11 +2,9 @@ package com.example.androidblossomingchildren.util.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,12 +22,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.androidblossomingchildren.R
-import com.example.androidblossomingchildren.util.theme.TionTheme
 
 @Composable
 fun TionDefaultModal() {
@@ -67,7 +63,10 @@ fun TionDefaultModal() {
 }
 
 @Composable
-fun TionModalCheck() {
+fun TionModalCheck(
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+) {
     Dialog(onDismissRequest = { }) {
         TionBackground(
             modifier = Modifier
@@ -97,7 +96,7 @@ fun TionModalCheck() {
                             containerColor = MaterialTheme.colorScheme.onTertiary,
                             contentColor = MaterialTheme.colorScheme.surface,
                         ),
-                        onClick = { },
+                        onClick = { onCancel() },
                         modifier = Modifier.width(110.dp),
                         shape = RoundedCornerShape(10.dp),
                         content = {
@@ -109,7 +108,7 @@ fun TionModalCheck() {
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     TionButton(
-                        onClick = { },
+                        onClick = { onConfirm() },
                         modifier = Modifier.width(110.dp),
                         shape = RoundedCornerShape(10.dp),
                         content = {
@@ -125,18 +124,18 @@ fun TionModalCheck() {
     }
 }
 
-@Preview
-@Composable
-private fun TionModalPreview() {
-    TionTheme {
-        TionBackground(
-            modifier = Modifier
-                .size(200.dp),
-        ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                // TionDefaultModal()
-                TionModalCheck()
-            }
-        }
-    }
-}
+// @Preview
+// @Composable
+// private fun TionModalPreview() {
+//    TionTheme {
+//        TionBackground(
+//            modifier = Modifier
+//                .size(200.dp),
+//        ) {
+//            Box(modifier = Modifier.fillMaxSize()) {
+//                // TionDefaultModal()
+//                TionModalCheck()
+//            }
+//        }
+//    }
+// }
