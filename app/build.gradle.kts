@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -22,7 +25,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            val baseUrl = getEnvValue("API_BASE_URL") ?: "http://default-url/"
+            buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
+        }
         release {
+            val baseUrl = getEnvValue("API_BASE_URL") ?: "http://default-url/"
+            buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -38,6 +47,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -90,4 +100,14 @@ dependencies {
     // Media3
     implementation("androidx.media3:media3-exoplayer:1.1.1")
     implementation("androidx.media3:media3-ui:1.1.1")
+}
+
+// .env 파일을 읽어오는 함수 정의
+fun getEnvValue(key: String): String? {
+    val properties = Properties()
+    val envFile = rootProject.file(".env")
+    if (envFile.exists()) {
+        properties.load(FileInputStream(envFile))
+    }
+    return properties.getProperty(key)
 }

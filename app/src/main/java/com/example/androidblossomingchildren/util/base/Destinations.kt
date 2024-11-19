@@ -30,6 +30,9 @@ enum class Destinations(
     SignUpVerification(
         route = "회원가입 이메일",
     ),
+    SignUpNickname(
+        route = "회원가입 닉네임",
+    ),
     SignUpPassword(
         route = "회원가입 비밀번호",
     ),
