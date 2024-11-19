@@ -58,7 +58,7 @@ fun RowScope.TionNavigationBarContent(
     currentScreen: Destinations,
     navController: NavHostController,
 ) {
-    val items = listOf("Home", "Stamp", "MyPage")
+    val items = listOf(Destinations.Home.route, Destinations.Stamp.route, Destinations.MyPage.route)
     val icons =
         listOf(
             TionIcons.Home,

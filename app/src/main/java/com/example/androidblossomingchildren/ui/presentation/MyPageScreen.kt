@@ -1,9 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.example.androidblossomingchildren.ui.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.ui.components.BottomSheetNameDialog
 import com.example.androidblossomingchildren.util.base.Destinations
 import com.example.androidblossomingchildren.util.component.TionGridItem
+import com.example.androidblossomingchildren.util.component.TionModalCheck
 import com.example.androidblossomingchildren.util.component.TionNavigationBar
 import com.example.androidblossomingchildren.util.component.TionNavigationBarContent
 import com.example.androidblossomingchildren.util.component.TionTopAppBar
@@ -50,9 +52,11 @@ import com.example.androidblossomingchildren.util.component.TionTopAppBar
 fun MyPageScreen(
     navController: NavHostController,
     onNavigateToDetail: (Any?) -> Unit,
+    onNavigateToAccountDelete: () -> Unit,
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     var nickname by remember { mutableStateOf("새싹꿈나무") }
+    var showLogoutDialog by remember { mutableStateOf(false) } // 로그아웃 모달 표시 여부
 
     Scaffold(
         topBar = {
@@ -91,7 +95,6 @@ fun MyPageScreen(
                     .fillMaxWidth()
                     .height(270.dp)
                     .background(MaterialTheme.colorScheme.primary),
-
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -179,7 +182,7 @@ fun MyPageScreen(
                     ),
             )
 
-            val itemList = List(20) { "제목 ${it + 1}" }
+            val itemList = List(20) { "영상 ${it + 1}" }
             LazyHorizontalGrid(
                 rows = GridCells.Fixed(1),
                 contentPadding = PaddingValues(all = 16.dp),
@@ -198,26 +201,41 @@ fun MyPageScreen(
             Text(
                 text = "로그아웃",
                 color = MaterialTheme.colorScheme.tertiary,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(
                         start = 25.dp,
                         top = 20.dp,
-                    ),
+                    )
+                    .clickable { showLogoutDialog = true }, // 클릭 시 모달 표시
             )
             Text(
                 text = "회원 탈퇴",
                 color = MaterialTheme.colorScheme.tertiary,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(
                         start = 25.dp,
-                        top = 10.dp,
+                        top = 15.dp,
                         bottom = 160.dp,
-                    ),
+                    )
+                    .clickable { onNavigateToAccountDelete() },
             )
+
+            // 로그아웃 모달
+            if (showLogoutDialog) {
+                TionModalCheck(
+                    onConfirm = {
+                        showLogoutDialog = false
+                        // 로그아웃 처리 로직 추가
+                    },
+                    onCancel = {
+                        showLogoutDialog = false
+                    },
+                )
+            }
         }
     }
 }

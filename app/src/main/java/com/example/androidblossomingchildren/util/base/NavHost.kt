@@ -9,11 +9,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.androidblossomingchildren.ui.presentation.AccountDeletionScreen
+import com.example.androidblossomingchildren.ui.presentation.AccountFindScreen
 import com.example.androidblossomingchildren.ui.presentation.HomeScreen
+import com.example.androidblossomingchildren.ui.presentation.LoginScreen
 import com.example.androidblossomingchildren.ui.presentation.MyPageScreen
 import com.example.androidblossomingchildren.ui.presentation.OnBoardingScreen
+import com.example.androidblossomingchildren.ui.presentation.PasswordResetScreen
+import com.example.androidblossomingchildren.ui.presentation.SignUpCompleteScreen
+import com.example.androidblossomingchildren.ui.presentation.SignUpPasswordScreen
+import com.example.androidblossomingchildren.ui.presentation.SignUpScreen
+import com.example.androidblossomingchildren.ui.presentation.SignUpVerificationScreen
 import com.example.androidblossomingchildren.ui.presentation.StampScreen
 import com.example.androidblossomingchildren.ui.presentation.VideoDetailScreen
+import com.example.androidblossomingchildren.ui.presentation.VideoResultScreen
 import com.example.androidblossomingchildren.ui.presentation.VideoScreen
 import com.example.androidblossomingchildren.ui.presentation.WelcomeScreen
 
@@ -44,7 +53,7 @@ fun TionNavigationGraph(
         }
         composable(Destinations.Welcome.route) {
             WelcomeScreen(
-                onNavigateToHome = { navController.navigateSingleTopTo(Destinations.Home.route) },
+                onNavigateToLogin = { navController.navigateSingleTopTo(Destinations.Login.route) },
             )
         }
         composable(Destinations.Home.route) {
@@ -61,6 +70,7 @@ fun TionNavigationGraph(
                 onNavigateToDetail = { videoId ->
                     navController.navigateToSingleVideo(navController, videoId.toString())
                 },
+                onNavigateToAccountDelete = { navController.navigate(Destinations.AccountDelete.route) },
                 navController = navController,
             )
         }
@@ -73,7 +83,7 @@ fun TionNavigationGraph(
             )
         }
         composable(
-            route = "video/{videoId}",
+            route = "${Destinations.Video.route}/{videoId}",
             arguments = listOf(
                 navArgument("videoId") {
                     type = NavType.StringType
@@ -82,8 +92,69 @@ fun TionNavigationGraph(
         ) { backStackEntry ->
             VideoDetailScreen(
                 backStackEntry.arguments?.getString("videoId").toString(),
+                onNavigateToResult = { videoId ->
+                    navController.navigate("${Destinations.Video.route}/$videoId/result") { launchSingleTop = true }
+                },
                 onNavigateToBack = { navController.popBackStack() },
-                navController = navController,
+            )
+        }
+        composable(
+            route = "${Destinations.Video.route}/{videoId}/result",
+            arguments = listOf(
+                navArgument("videoId") {
+                    type = NavType.StringType
+                },
+            ),
+        ) { backStackEntry ->
+            VideoResultScreen(
+                backStackEntry.arguments?.getString("videoId").toString(),
+                onNavigateToStamp = { navController.navigateSingleTopTo(Destinations.Stamp.route) },
+                onNavigateToBack = { navController.popBackStack() },
+            )
+        }
+        composable(Destinations.Login.route) {
+            LoginScreen(
+                onNavigateToHome = { navController.navigateSingleTopTo(Destinations.Home.route) },
+                onNavigateToAccountFind = { navController.navigate(Destinations.AccountFind.route) },
+                onNavigateToSignUp = { navController.navigate(Destinations.SignUp.route) },
+            )
+        }
+        composable(Destinations.SignUp.route) {
+            SignUpScreen(
+                onNavigateToSignUpVerification = { navController.navigate(Destinations.SignUpVerification.route) },
+            )
+        }
+        composable(Destinations.SignUpVerification.route) {
+            SignUpVerificationScreen(
+                onNavigateToSignUpPassword = { navController.navigate(Destinations.SignUpPassword.route) },
+            )
+        }
+        composable(Destinations.SignUpPassword.route) {
+            SignUpPasswordScreen(
+                onNavigateToSignUpComplete = { navController.navigateSingleTopTo(Destinations.SignUpComplete.route) },
+            )
+        }
+        composable(Destinations.SignUpComplete.route) {
+            SignUpCompleteScreen(
+                onNavigateToLogin = { navController.navigateSingleTopTo(Destinations.Login.route) },
+            )
+        }
+        composable(Destinations.AccountFind.route) {
+            AccountFindScreen(
+                onNavigateToPasswordReset = { navController.navigate(Destinations.PasswordReset.route) },
+                onNavigateToBack = { navController.popBackStack() },
+            )
+        }
+        composable(Destinations.PasswordReset.route) {
+            PasswordResetScreen(
+                onNavigateToLogin = { navController.navigateSingleTopTo(Destinations.Login.route) },
+                onNavigateToBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Destinations.AccountDelete.route) {
+            AccountDeletionScreen(
+                onNavigateToBack = { navController.popBackStack() },
             )
         }
     }

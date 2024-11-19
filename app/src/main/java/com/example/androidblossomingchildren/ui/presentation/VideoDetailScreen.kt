@@ -18,19 +18,22 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,38 +44,116 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.NavController
+import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
+import com.example.androidblossomingchildren.DescriptionTexts
 import com.example.androidblossomingchildren.R
+import com.example.androidblossomingchildren.ui.components.TionModal
 import com.example.androidblossomingchildren.util.component.TionButton
 import com.example.androidblossomingchildren.util.component.TionTopAppBarBack
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun VideoDetailScreen(
     videoId: String,
+    onNavigateToResult: (Any?) -> Unit,
     onNavigateToBack: () -> Unit,
-    navController: NavController,
 ) {
     val currentPage = remember { mutableStateOf(0) }
     val totalPages = 4
+    val activity = LocalContext.current as ComponentActivity
+    val showModal = remember { mutableStateOf(false) }
+    val modalAccuracy = remember { mutableStateOf(0.8f) }
+
+    val context = LocalContext.current
+    val exoplayer = ExoPlayer.Builder(context).build()
+    val mediaSource =
+        remember {
+            mutableStateOf(MediaItem.fromUri("android.resource://com.example.androidblossomingchildren/${R.raw.sample_video_total}"))
+        }
+    val isLoading = remember { mutableStateOf(true) }
+
+    LaunchedEffect(isLoading.value) {
+        exoplayer.setMediaItem(mediaSource.value)
+        exoplayer.prepare()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            exoplayer.release()
+        }
+    }
+
+    LaunchedEffect(currentPage.value) {
+        isLoading.value = true
+        exoplayer.release()
+        if (currentPage.value == 2) {
+            modalAccuracy.value = 0.5f
+            delay(7000L)
+            showModal.value = true
+        } else if (currentPage.value > 0 && !showModal.value) {
+            modalAccuracy.value = 0.8f
+            delay(7000L)
+            showModal.value = true
+        }
+    }
 
     Scaffold(
         topBar = {
             TionTopAppBarBack(
                 title = {
-                    Text(text = "Video $videoId")
+                    Text(
+                        text = videoId,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
                 },
+                modifier = Modifier
+                    .padding(vertical = 15.dp),
                 onNavigationClick = onNavigateToBack,
             )
         },
         content = { padding ->
+            if (showModal.value) {
+                TionModal(
+                    accuracy = modalAccuracy.value,
+                    isLastPage = currentPage.value == totalPages,
+                    onDismiss = {
+                        if (currentPage.value == totalPages) {
+                            onNavigateToResult(videoId)
+                        } else if (currentPage.value == 2 && modalAccuracy.value == 0.5f) {
+                            modalAccuracy.value = 0.8f
+                            showModal.value = false
+
+                            activity.lifecycleScope.launch {
+                                delay(7000L)
+                                showModal.value = true
+                            }
+
+                            exoplayer.play()
+                        } else {
+                            if (currentPage.value < totalPages) {
+                                currentPage.value++
+                                showModal.value = false
+                            }
+                        }
+                    },
+                )
+            }
+
             Column(
                 Modifier
                     .padding(padding)
@@ -98,43 +179,115 @@ fun VideoDetailScreen(
                                 }
                             }
                         }
+                        // 인디케이터
+
+                        if (isLoading.value) {
+                            CircularProgressIndicator()
+                        } else {
+                            when (currentPage.value) {
+                                0 -> {
+                                    AndroidView(
+                                        factory = { ctx ->
+                                            PlayerView(ctx).apply {
+                                                player = exoplayer
+                                                exoplayer.playWhenReady = true
+                                            }
+                                        },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(200.dp),
+                                    )
+                                    DescriptionTexts()
+                                    Spacer(Modifier.height(70.dp))
+                                    TionButton(
+                                        onClick = {
+                                            if (currentPage.value == 0) {
+                                                currentPage.value++
+                                            }
+                                        },
+                                        content = {
+                                            Text(
+                                                text = "다음",
+                                                fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
+                                                fontSize = 20.sp,
+                                            )
+                                        },
+                                        modifier = Modifier
+                                            .padding(32.dp)
+                                            .width(300.dp)
+                                            .height(75.dp),
+                                    )
+                                }
+
+                                else -> {
+                                    AndroidView(
+                                        factory = { ctx ->
+                                            PlayerView(ctx).apply {
+                                                player = exoplayer
+                                                exoplayer.playWhenReady = true
+                                            }
+                                        },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(200.dp),
+                                    )
+                                    Spacer(Modifier.height(175.dp))
+                                    CameraXPreview(activity = activity)
+                                }
+                            }
+                        }
+//                        TionButton(
+//                            onClick = {
+//                                if (currentPage.value == 0) {
+//                                currentPage.value++
+//                                }
+//                            },
+//                            content = {
+//                                Text(
+//                                    text = "다음",
+//                                    fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
+//                                    fontSize = 20.sp,
+//                                )
+//                            },
+//                            modifier = Modifier
+//                                .padding(32.dp)
+//                                .width(300.dp)
+//                                .height(75.dp),
+//                        )
 
                         when (currentPage.value) {
                             0 -> {
-                                // YouTubePlayer(youtubeVideoId = "4SYi6EBeAr8", lifecycleOwner = activity)
-                                DescriptionTexts()
+                                mediaSource.value =
+                                    MediaItem.fromUri("android.resource://com.example.androidblossomingchildren/${R.raw.sample_video_total}")
+                                isLoading.value = false
                             }
-                            else -> {
-//                                YouTubePlayer(
-//                                    youtubeVideoId = "4SYi6EBeAr8",
-//                                    lifecycleOwner = activity,
-//                                    modifier = Modifier
-//                                        .fillMaxWidth()
-//                                        .aspectRatio(16 / 9f)
-//                                )
-//                                CameraXPreview(activity = activity)
+
+                            1 -> {
+                                mediaSource.value =
+                                    MediaItem.fromUri("android.resource://com.example.androidblossomingchildren/${R.raw.sample_video_walk}")
+                                isLoading.value = false
+                            }
+
+                            2 -> {
+                                mediaSource.value =
+                                    MediaItem.fromUri("android.resource://com.example.androidblossomingchildren/${R.raw.sample_video_clap}")
+                                isLoading.value = false
+                            }
+
+                            3 -> {
+                                mediaSource.value =
+                                    MediaItem.fromUri("android.resource://com.example.androidblossomingchildren/${R.raw.sample_video_cheer}")
+                                isLoading.value = false
+                            }
+
+                            4 -> {
+                                mediaSource.value =
+                                    MediaItem.fromUri("android.resource://com.example.androidblossomingchildren/${R.raw.sample_video_oneleg}")
+                                isLoading.value = false
                             }
                         }
                     }
                 }
-
-                TionButton(
-                    onClick = {
-                        if (currentPage.value < totalPages) {
-                            currentPage.value++
-                        }
-                    },
-                    content = {
-                        Text(
-                            text = if (currentPage.value == totalPages) "완료" else "다음",
-                            fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
-                            fontSize = 20.sp,
-                        )
-                    },
-                    modifier = Modifier
-                        .padding(32.dp)
-                        .width(300.dp),
-                )
             }
         },
     )
@@ -142,25 +295,28 @@ fun VideoDetailScreen(
 
 @Composable
 fun DescriptionTexts() {
-    Column(horizontalAlignment = Alignment.Start) {
+    Column(
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
         Text(
-            text = "1. 1번 설명입니다.1",
+            text = "1. 1번 설명입니다.",
             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
             fontSize = 30.sp,
             modifier = Modifier.padding(top = 50.dp),
         )
         Text(
-            text = "2. 2번 설명입니다.22",
+            text = "2. 2번 설명입니다.",
             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
             fontSize = 30.sp,
         )
         Text(
-            text = "3. 3번 설명입니다.333",
+            text = "3. 3번 설명입니다.",
             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
             fontSize = 30.sp,
         )
         Text(
-            text = "4. 4번 설명입니다.4444",
+            text = "4. 4번 설명입니다.",
             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
             fontSize = 30.sp,
         )
@@ -168,7 +324,11 @@ fun DescriptionTexts() {
 }
 
 @Composable
-fun YouTubePlayer(youtubeVideoId: String, lifecycleOwner: LifecycleOwner, modifier: Modifier = Modifier) {
+fun YouTubePlayer(
+    youtubeVideoId: String,
+    lifecycleOwner: LifecycleOwner,
+    modifier: Modifier = Modifier,
+) {
     AndroidView(
         modifier = Modifier
             .fillMaxWidth()
@@ -250,8 +410,7 @@ fun CameraXPreview(activity: ComponentActivity) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(1f)
-                .padding(top = 16.dp)
+                .height(200.dp)
                 .clipToBounds(),
         )
     }
