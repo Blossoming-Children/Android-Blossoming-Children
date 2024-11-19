@@ -13,21 +13,21 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface AuthService {
-    @POST("/auth/sign-in") // 로그인 엔드포인트
+    @POST("/api/auth/sign-in") // 로그인 엔드포인트
     fun login(
         @Header("Content-Type") contentType: String = "application/json",
         @Header("Authorization") authorization: String,
         @Body request: LoginRequest,
     ): Call<LoginResponse>
 
-    @POST("/auth/sign-up")
+    @POST("/api/auth/sign-up")
     fun signUp(
         @Header("Content-Type") contentType: String = "application/json",
         @Header("Authorization") authorization: String,
         @Body request: SignUpRequest,
     ): Call<SignUpResponse>
 
-    @GET("/auth/find-email")
+    @GET("/api/auth/find-email")
     fun findEmail(
         @Header("Content-Type") contentType: String = "application/json",
         @Query("email") email: String,
