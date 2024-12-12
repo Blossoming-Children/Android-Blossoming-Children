@@ -30,7 +30,7 @@ import com.example.androidblossomingchildren.util.component.TionButton
 
 @Composable
 fun SignUpVerificationScreen(
-    onNavigateToSignUpNickname: () -> Unit,
+    onNavigateToSignUpPassword: () -> Unit,
 ) {
     var code by remember { mutableStateOf("") }
     val isButtonEnabled by remember { derivedStateOf { code.length == 6 } }
@@ -69,7 +69,7 @@ fun SignUpVerificationScreen(
 
             // 진행 상태 ProgressBar
             LinearProgressIndicator(
-                progress = 0.40f, // 진행 상태 (0.0 ~ 1.0, 66% 진행)
+                progress = 0.50f, // 진행 상태 (0.0 ~ 1.0, 66% 진행)
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(4.dp),
@@ -119,7 +119,7 @@ fun SignUpVerificationScreen(
 
         // "다음" 버튼
         TionButton(
-            onClick = { onNavigateToSignUpNickname() },
+            onClick = { onNavigateToSignUpPassword() },
             enabled = isButtonEnabled, // 코드가 6자리가 아니면 비활성화
             modifier = Modifier
                 .fillMaxWidth()
