@@ -81,7 +81,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("io.coil-kt:coil:2.4.0")
+    implementation("io.coil-kt:coil:2.2.2")
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
 
@@ -100,6 +100,8 @@ dependencies {
     // Media3
     implementation("androidx.media3:media3-exoplayer:1.1.1")
     implementation("androidx.media3:media3-ui:1.1.1")
+
+    implementation("io.coil-kt:coil-compose:2.0.0")
 }
 
 // .env 파일을 읽어오는 함수 정의
