@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.util.theme.Black300
 import com.example.androidblossomingchildren.util.theme.Yellow500
@@ -56,7 +56,7 @@ fun TionGridItem(
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Image(
-                painter = rememberImagePainter(data = imageUrl),
+                painter = rememberAsyncImagePainter(model = imageUrl),
                 contentDescription = title,
                 modifier = Modifier
                     .height(100.dp)

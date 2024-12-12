@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +38,6 @@ import androidx.navigation.NavHostController
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.ui.components.BottomSheetNameDialog
 import com.example.androidblossomingchildren.util.base.Destinations
-import com.example.androidblossomingchildren.util.component.TionGridItem
 import com.example.androidblossomingchildren.util.component.TionModalCheck
 import com.example.androidblossomingchildren.util.component.TionNavigationBar
 import com.example.androidblossomingchildren.util.component.TionNavigationBarContent
@@ -51,7 +46,7 @@ import com.example.androidblossomingchildren.util.component.TionTopAppBar
 @Composable
 fun MyPageScreen(
     navController: NavHostController,
-    onNavigateToDetail: (Any?) -> Unit,
+    onNavigateToDetail: (Int) -> Unit,
     onNavigateToAccountDelete: () -> Unit,
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -183,21 +178,21 @@ fun MyPageScreen(
             )
 
             val itemList = List(20) { "영상 ${it + 1}" }
-            LazyHorizontalGrid(
-                rows = GridCells.Fixed(1),
-                contentPadding = PaddingValues(all = 16.dp),
-                modifier = Modifier
-                    .height(230.dp),
-            ) {
-                items(itemList) { item ->
-                    TionGridItem(
-                        item,
-                        onClick = {
-                            onNavigateToDetail(item)
-                        },
-                    )
-                }
-            }
+//            LazyHorizontalGrid(
+//                rows = GridCells.Fixed(1),
+//                contentPadding = PaddingValues(all = 16.dp),
+//                modifier = Modifier
+//                    .height(230.dp),
+//            ) {
+//                items(itemList) { item ->
+//                    TionGridItem(
+//                        item,
+//                        onClick = {
+//                            onNavigateToDetail(item)
+//                        },
+//                    )
+//                }
+//            }
             Text(
                 text = "로그아웃",
                 color = MaterialTheme.colorScheme.tertiary,

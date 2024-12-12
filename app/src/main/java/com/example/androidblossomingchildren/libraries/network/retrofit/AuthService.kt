@@ -1,6 +1,5 @@
 package com.example.androidblossomingchildren.libraries.network.retrofit
 
-import com.example.androidblossomingchildren.libraries.network.dataClass.AddStampResponse
 import com.example.androidblossomingchildren.libraries.network.dataClass.EducationDetailResponse
 import com.example.androidblossomingchildren.libraries.network.dataClass.EducationResponse
 import com.example.androidblossomingchildren.libraries.network.dataClass.FindEmailResponse
@@ -8,14 +7,10 @@ import com.example.androidblossomingchildren.libraries.network.dataClass.LoginRe
 import com.example.androidblossomingchildren.libraries.network.dataClass.LoginResponse
 import com.example.androidblossomingchildren.libraries.network.dataClass.SignUpRequest
 import com.example.androidblossomingchildren.libraries.network.dataClass.SignUpResponse
-import com.example.androidblossomingchildren.libraries.network.dataClass.StampBoardResponse
-import com.example.androidblossomingchildren.libraries.network.dataClass.UpdateGoalRequest
-import com.example.androidblossomingchildren.libraries.network.dataClass.UpdateGoalResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -54,22 +49,22 @@ interface AuthService {
         @Path("eduId") eduId: Int,
     ): Call<EducationDetailResponse>
 
-    @GET("/stamp")
-    fun getStampBoard(
-        @Header("Content-Type") contentType: String = "application/json",
-        @Header("Authorization") authorization: Long,
-    ): Call<StampBoardResponse>
-
-    @POST("/stamp")
-    fun addStamp(
-        @Header("Content-Type") contentType: String = "application/json",
-        @Header("Authorization") authorization: Int,
-    ): Call<AddStampResponse>
-
-    @PATCH("/stamp")
-    fun updateGoal(
-        @Header("Content-Type") contentType: String = "application/json",
-        @Header("Authorization") authorization: Int,
-        @Body request: UpdateGoalRequest,
-    ): Call<UpdateGoalResponse>
+//    @GET("/stamp")
+//    fun getStampBoard(
+//        @Header("Content-Type") contentType: String = "application/json",
+//        @Header("Authorization") authorization: Long,
+//    ): Call<StampBoardResponse>
+//
+//    @POST("/stamp")
+//    fun addStamp(
+//        @Header("Content-Type") contentType: String = "application/json",
+//        @Header("Authorization") authorization: Int,
+//    ): Call<AddStampResponse>
+//
+//    @PATCH("/stamp")
+//    fun updateGoal(
+//        @Header("Content-Type") contentType: String = "application/json",
+//        @Header("Authorization") authorization: Int,
+//        @Body request: UpdateGoalRequest,
+//    ): Call<UpdateGoalResponse>
 }
