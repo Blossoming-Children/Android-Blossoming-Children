@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -16,8 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,23 +26,25 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.example.androidblossomingchildren.R
 import com.example.androidblossomingchildren.util.theme.Black300
 import com.example.androidblossomingchildren.util.theme.Yellow500
 
 @Composable
 fun TionGridItem(
-    item: String,
+    title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    progress: Float = 0.75f,
-    isBookmarkedState: MutableState<Boolean> = remember { mutableStateOf(false) },
-    imageResource: Int = R.drawable.video_example,
+    progress: Int = 0,
+    isBookmarkedState: MutableState<Boolean>,
+    imageUrl: String,
     bookmarkIconResource: Int = R.drawable.bookmark_blank,
     progressColor: Color = MaterialTheme.colorScheme.secondary,
     trackColor: Color = Color.LightGray,
     bookmarkColor: Color = Yellow500,
     nonBookmarkColor: Color = Black300,
+    addBookmark: () -> Unit,
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -55,11 +56,11 @@ fun TionGridItem(
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Image(
-                painter = painterResource(id = imageResource),
-                contentDescription = item,
+                painter = rememberImagePainter(data = imageUrl),
+                contentDescription = title,
                 modifier = Modifier
                     .height(100.dp)
-                    .fillMaxWidth(),
+                    .width(100.dp),
                 contentScale = ContentScale.Crop,
             )
 
@@ -70,7 +71,7 @@ fun TionGridItem(
                     .padding(top = 4.dp),
             ) {
                 LinearProgressIndicator(
-                    progress = progress,
+                    progress = (progress.toFloat() / 100),
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
@@ -79,7 +80,7 @@ fun TionGridItem(
                 )
 
                 Text(
-                    text = "${(progress * 100).toInt()}%",
+                    text = "$progress%",
                     modifier = Modifier.padding(start = 4.dp),
                     style = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily(Font(R.font.laundrygothic_regular))),
                 )
@@ -94,11 +95,14 @@ fun TionGridItem(
                     tint = if (isBookmarkedState.value) bookmarkColor else nonBookmarkColor,
                     contentDescription = "Bookmark",
                     modifier = Modifier
-                        .clickable { isBookmarkedState.value = !isBookmarkedState.value },
+                        .clickable {
+                            isBookmarkedState.value = !isBookmarkedState.value
+                            addBookmark()
+                        },
                 )
 
                 Text(
-                    text = item,
+                    text = title,
                     modifier = Modifier.padding(start = 4.dp),
                     style = MaterialTheme.typography.bodyLarge.copy(fontFamily = FontFamily(Font(R.font.laundrygothic_regular))),
                     fontSize = 16.sp,

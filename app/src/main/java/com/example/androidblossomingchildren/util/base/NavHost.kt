@@ -28,12 +28,14 @@ import com.example.androidblossomingchildren.ui.presentation.VideoResultScreen
 import com.example.androidblossomingchildren.ui.presentation.VideoScreen
 import com.example.androidblossomingchildren.ui.presentation.WelcomeScreen
 import com.example.androidblossomingchildren.ui.viewmodel.SignUpViewModel
+import com.example.androidblossomingchildren.ui.viewmodel.VideoDetailViewModel
 
 @Composable
 fun TionNavigationGraph(
     navController: NavHostController = rememberNavController(),
 ) {
     val signUpViewModel: SignUpViewModel = viewModel()
+    val videoDetailViewModel: VideoDetailViewModel = viewModel()
 
     val isFirstLogin = true /* TODO: 수정 필요. 온보딩은 그대로 두고 로그인 화면에서 자동 로그인을 처리 */
 
@@ -73,7 +75,7 @@ fun TionNavigationGraph(
         composable(Destinations.MyPage.route) {
             MyPageScreen(
                 onNavigateToDetail = { videoId ->
-                    navController.navigateToSingleVideo(navController, videoId.toString())
+                    navController.navigateToSingleVideo(navController, videoId)
                 },
                 onNavigateToAccountDelete = { navController.navigate(Destinations.AccountDelete.route) },
                 navController = navController,
@@ -82,25 +84,29 @@ fun TionNavigationGraph(
         composable(Destinations.Video.route) {
             VideoScreen(
                 onNavigateToDetail = { videoId ->
-                    navController.navigateToSingleVideo(navController, videoId.toString())
+                    navController.navigateToSingleVideo(navController, videoId)
                 },
                 onNavigateToBack = { navController.popBackStack() },
+                viewModel = videoDetailViewModel,
             )
         }
         composable(
             route = "${Destinations.Video.route}/{videoId}",
             arguments = listOf(
                 navArgument("videoId") {
-                    type = NavType.StringType
+                    type = NavType.IntType
                 },
             ),
         ) { backStackEntry ->
             VideoDetailScreen(
-                backStackEntry.arguments?.getString("videoId").toString(),
+                backStackEntry.arguments!!.getInt("videoId"),
                 onNavigateToResult = { videoId ->
-                    navController.navigate("${Destinations.Video.route}/$videoId/result") { launchSingleTop = true }
+                    navController.navigate("${Destinations.Video.route}/$videoId/result") {
+                        launchSingleTop = true
+                    }
                 },
                 onNavigateToBack = { navController.popBackStack() },
+                viewModel = videoDetailViewModel,
             )
         }
         composable(
@@ -112,9 +118,10 @@ fun TionNavigationGraph(
             ),
         ) { backStackEntry ->
             VideoResultScreen(
-                backStackEntry.arguments?.getString("videoId").toString(),
+                backStackEntry.arguments?.getInt("videoId"),
                 onNavigateToStamp = { navController.navigateSingleTopTo(Destinations.Stamp.route) },
                 onNavigateToBack = { navController.popBackStack() },
+                viewModel = videoDetailViewModel,
             )
         }
         composable(Destinations.Login.route) {
@@ -185,7 +192,7 @@ fun NavHostController.navigateSingleTopTo(route: String) =
 
 private fun NavHostController.navigateToSingleVideo(
     navController: NavHostController,
-    videoId: String,
+    videoId: Int,
 ) {
     navController.navigate("${Destinations.Video.route}/$videoId") { launchSingleTop = true }
 }
