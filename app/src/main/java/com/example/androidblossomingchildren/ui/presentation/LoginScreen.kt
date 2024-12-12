@@ -66,14 +66,19 @@ fun LoginScreen(
         if (email.isNotEmpty() && password.isNotEmpty()) {
             val refreshToken = generateAccessToken()
             // 자동 로그인 시도
-            loginUser(email, password, refreshToken) { message ->
-                toastMessage = message
-                showToast = true
-
-                if (message == "로그인에 성공했습니다.") {
+            loginUser(
+                email,
+                password,
+                refreshToken,
+                onSuccess = {
                     onNavigateToHome()
-                }
-            }
+                },
+                showToast = { message ->
+                    // 실패 시 토스트 메시지 표시
+                    toastMessage = message
+                    showToast = true
+                },
+            )
         }
     }
 
@@ -168,25 +173,30 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .height(60.dp),
                 onClick = {
-                    val refreshToken = "YOUR_REFRESH_TOKEN" /* TODO: 실제 토큰으로 대체해야 함 */
+                    val refreshToken = generateAccessToken()
                     if (!checkEmailForm(email)) {
                         toastMessage = "이메일 형식으로 입력해주세요."
                         showToast = true
                     } else {
-                        loginUser(email, password, refreshToken) { message ->
-                            toastMessage = message
-                            showToast = true
-
-                            // 로그인 성공 시 이메일과 비밀번호 저장
-                            if (message == "로그인에 성공했습니다.") {
+                        loginUser(
+                            email,
+                            password,
+                            refreshToken,
+                            onSuccess = { authId ->
                                 val editor = sharedPreferences.edit()
                                 editor.putString("saved_email", email)
                                 editor.putString("saved_password", password)
+                                editor.putLong("saved_authId", authId)
                                 editor.apply()
 
                                 onNavigateToHome()
-                            }
-                        }
+                            },
+                            showToast = { message ->
+                                // 실패 시 토스트 메시지 표시
+                                toastMessage = message
+                                showToast = true
+                            },
+                        )
                     }
                 },
                 enabled = isButtonEnabled, // 이메일이 비어 있으면 비활성화
