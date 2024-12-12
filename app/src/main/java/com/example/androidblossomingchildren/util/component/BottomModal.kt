@@ -136,7 +136,8 @@ fun BottomSheetStampDialog(
 @Composable
 fun TionBottomModalName() {
     var showBottomSheet by remember { mutableStateOf(false) }
-    var nickname by remember { mutableStateOf("") }
+    var innerText by remember { mutableStateOf("") }
+    val title by remember { mutableStateOf("") }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         IconButton(onClick = { showBottomSheet = true }) {
@@ -148,9 +149,10 @@ fun TionBottomModalName() {
 
         if (showBottomSheet) {
             BottomSheetNameDialog(
+                title = title,
                 onDismissRequest = { showBottomSheet = false },
-                nickname = nickname,
-                onNicknameChange = { newNickname -> nickname = newNickname },
+                innerText = innerText,
+                onInnerTextChange = { newInnerText -> innerText = newInnerText },
             )
         }
     }
@@ -158,9 +160,10 @@ fun TionBottomModalName() {
 
 @Composable
 fun BottomSheetNameDialog(
+    title: String,
     onDismissRequest: () -> Unit,
-    nickname: String,
-    onNicknameChange: (String) -> Unit,
+    innerText: String,
+    onInnerTextChange: (String) -> Unit,
 ) {
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Surface(
@@ -169,7 +172,7 @@ fun BottomSheetNameDialog(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "닉네임",
+                    text = title,
                     fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
                     style = MaterialTheme.typography.headlineMedium.copy(
                         color = Blue750,
@@ -180,8 +183,8 @@ fun BottomSheetNameDialog(
                         .padding(bottom = 8.dp),
                 )
                 OutlinedTextField(
-                    value = nickname,
-                    onValueChange = onNicknameChange,
+                    value = innerText,
+                    onValueChange = onInnerTextChange,
                     placeholder = {
                         Text(
                             text = "여기에 입력해 주세요.",
