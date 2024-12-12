@@ -100,6 +100,8 @@ dependencies {
     // Media3
     implementation("androidx.media3:media3-exoplayer:1.1.1")
     implementation("androidx.media3:media3-ui:1.1.1")
+
+    implementation("io.coil-kt:coil-compose:2.0.0")
 }
 
 // .env 파일을 읽어오는 함수 정의
