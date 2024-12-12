@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
+import com.example.androidblossomingchildren.ui.config.addStamp
 import com.example.androidblossomingchildren.ui.viewmodel.VideoDetailViewModel
 import com.example.androidblossomingchildren.util.component.TionButton
 import com.example.androidblossomingchildren.util.component.TionStampModal
@@ -50,7 +51,6 @@ import com.example.androidblossomingchildren.util.theme.Green500
 
 @Composable
 fun VideoResultScreen(
-    videoId: Int?,
     onNavigateToStamp: () -> Unit,
     onNavigateToBack: () -> Unit,
     viewModel: VideoDetailViewModel,
@@ -214,9 +214,9 @@ fun VideoResultScreen(
                 showModal.value = false // 모달이 열린 이후 다시 닫히도록 설정
                 onNavigateToStamp()
             },
-//            addStamp(
-//                userId = authId.toInt(),
-//            ),
+            addStamp(
+                userId = authId.toInt(),
+            ),
         )
     }
 }
