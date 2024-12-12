@@ -1,5 +1,6 @@
 package com.example.androidblossomingchildren.ui.presentation
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,16 +36,22 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
+import com.example.androidblossomingchildren.ui.config.generateAccessToken
+import com.example.androidblossomingchildren.ui.config.signUpUser
+import com.example.androidblossomingchildren.ui.viewmodel.SignUpViewModel
 import com.example.androidblossomingchildren.util.component.TionButton
 
 @Composable
 fun SignUpPasswordScreen(
+    viewModel: SignUpViewModel,
     onNavigateToSignUpComplete: () -> Unit,
 ) {
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
+    var showToast by remember { mutableStateOf(false) }
+    var toastMessage by remember { mutableStateOf("") }
 
     val isPasswordValid by remember {
         derivedStateOf {
@@ -94,7 +101,7 @@ fun SignUpPasswordScreen(
 
             // 진행 상태 ProgressBar
             LinearProgressIndicator(
-                progress = 0.75f, // 진행 상태 (0.0 ~ 1.0)
+                progress = 0.80f, // 진행 상태 (0.0 ~ 1.0)
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(4.dp),
@@ -153,7 +160,10 @@ fun SignUpPasswordScreen(
             // 비밀번호 확인 입력 필드
             OutlinedTextField(
                 value = confirmPassword,
-                onValueChange = { confirmPassword = it },
+                onValueChange = {
+                    confirmPassword = it
+                    viewModel.password.value = it
+                },
                 label = {
                     Text(
                         text = "비밀번호를 한 번 더 입력하세요",
@@ -216,7 +226,26 @@ fun SignUpPasswordScreen(
 
         // "다음" 버튼
         TionButton(
-            onClick = { onNavigateToSignUpComplete() },
+            onClick = {
+                val refreshToken = generateAccessToken()
+                Log.d("Refresh token: ", refreshToken)
+                // 회원가입 요청 전송
+                signUpUser(
+                    email = viewModel.email.value,
+                    password = viewModel.password.value,
+                    nickname = viewModel.name.value,
+                    refreshToken = refreshToken,
+                    onSuccess = {
+                        // 성공 시 회원가입 완료 화면으로 이동
+                        onNavigateToSignUpComplete()
+                    },
+                    onFailure = { message ->
+                        // 실패 시 토스트 메시지 표시
+                        toastMessage = message
+                        showToast = true
+                    },
+                )
+            },
             enabled = isButtonEnabled, // 비밀번호 유효성 확인
             modifier = Modifier
                 .fillMaxWidth()
@@ -227,6 +256,13 @@ fun SignUpPasswordScreen(
                 fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
                 color = MaterialTheme.colorScheme.surface,
+            )
+        }
+
+        if (showToast) { /* TODO: 아마 위치 수정해야 할 듯 */
+            TionToast(
+                messageTxt = toastMessage,
+                onDismiss = { showToast = false },
             )
         }
     }

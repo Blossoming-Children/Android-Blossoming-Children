@@ -2,6 +2,8 @@
 
 package com.example.androidblossomingchildren.ui.presentation
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +22,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -27,6 +31,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -36,23 +41,34 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
+import com.example.androidblossomingchildren.ui.config.addStamp
+import com.example.androidblossomingchildren.ui.viewmodel.VideoDetailViewModel
 import com.example.androidblossomingchildren.util.component.TionButton
+import com.example.androidblossomingchildren.util.component.TionStampModal
 import com.example.androidblossomingchildren.util.component.TionTopAppBarBack
 import com.example.androidblossomingchildren.util.theme.Black300
 import com.example.androidblossomingchildren.util.theme.Green500
 
 @Composable
 fun VideoResultScreen(
-    videoId: String,
+    videoId: Int?,
     onNavigateToStamp: () -> Unit,
     onNavigateToBack: () -> Unit,
+    viewModel: VideoDetailViewModel,
 ) {
+    val average = viewModel.getAccuracyAverage()
+    val showModal = remember { mutableStateOf(false) }
+
+    val context: Context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+    val authId = sharedPreferences.getLong("saved_authId", 0)
+
     Scaffold(
         topBar = {
             TionTopAppBarBack(
                 title = {
                     Text(
-                        text = videoId,
+                        text = viewModel.getVideoTitle(),
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -116,7 +132,7 @@ fun VideoResultScreen(
                                         modifier = Modifier.size(100.dp),
                                     )
                                     Text(
-                                        text = "82%",
+                                        text = "$average%",
                                         fontSize = 24.sp,
                                         fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
                                     )
@@ -174,7 +190,8 @@ fun VideoResultScreen(
                 ) {
                     TionButton(
                         onClick = {
-                            onNavigateToStamp()
+                            viewModel.clearAccuracyList()
+                            showModal.value = true
                         },
                         modifier = Modifier
                             .padding(32.dp)
@@ -191,6 +208,18 @@ fun VideoResultScreen(
             }
         },
     )
+    if (showModal.value) {
+        Log.d("Stamp", "모달 띄우기")
+        TionStampModal(
+            onMove = {
+                showModal.value = false // 모달이 열린 이후 다시 닫히도록 설정
+                onNavigateToStamp()
+            },
+            addStamp(
+                userId = authId.toInt(),
+            ),
+        )
+    }
 }
 
 @Composable

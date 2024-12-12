@@ -1,6 +1,5 @@
 package com.example.androidblossomingchildren.ui.presentation
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,14 +25,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidblossomingchildren.R
+import com.example.androidblossomingchildren.ui.viewmodel.SignUpViewModel
 import com.example.androidblossomingchildren.util.component.TionButton
 
 @Composable
-fun SignUpVerificationScreen(
-    onNavigateToSignUpNickname: () -> Unit,
+fun SignUpNicknameScreen(
+    viewModel: SignUpViewModel,
+    onNavigateToSignUpPassword: () -> Unit,
 ) {
-    var code by remember { mutableStateOf("") }
-    val isButtonEnabled by remember { derivedStateOf { code.length == 6 } }
+    var name by remember { mutableStateOf("") }
+    val isButtonEnabled by remember { derivedStateOf { name.isNotEmpty() } }
 
     Column(
         modifier = Modifier
@@ -47,7 +48,6 @@ fun SignUpVerificationScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-
             // 상단 타이틀
             Text(
                 text = "아이조아",
@@ -69,7 +69,7 @@ fun SignUpVerificationScreen(
 
             // 진행 상태 ProgressBar
             LinearProgressIndicator(
-                progress = 0.40f, // 진행 상태 (0.0 ~ 1.0, 66% 진행)
+                progress = 0.60f, // 진행 상태 (0.0 ~ 1.0)
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(4.dp),
@@ -80,7 +80,7 @@ fun SignUpVerificationScreen(
 
             // 설명 텍스트
             Text(
-                text = "이메일로 인증 코드가 발송되었습니다.",
+                text = "닉네임을 입력해 주세요.",
                 fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.tertiaryContainer,
@@ -88,13 +88,16 @@ fun SignUpVerificationScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 인증 코드 입력 필드
+            // 이메일 입력 필드
             OutlinedTextField(
-                value = code,
-                onValueChange = { code = it },
+                value = name,
+                onValueChange = {
+                    name = it
+                    viewModel.name.value = it
+                },
                 label = {
                     Text(
-                        text = "인증 코드 6자리를 입력하세요",
+                        text = "닉네임을 입력하세요",
                         fontSize = 20.sp,
                         fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
                         color = MaterialTheme.colorScheme.tertiary,
@@ -102,25 +105,14 @@ fun SignUpVerificationScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // 재발송 텍스트
-            Text(
-                text = "재발송",
-                fontFamily = FontFamily(Font(R.font.laundrygothic_bold)),
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.tertiary,
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .clickable { /* 재발송 로직 */ },
-            )
         }
 
         // "다음" 버튼
         TionButton(
-            onClick = { onNavigateToSignUpNickname() },
-            enabled = isButtonEnabled, // 코드가 6자리가 아니면 비활성화
+            onClick = {
+                onNavigateToSignUpPassword()
+            },
+            enabled = isButtonEnabled, // 비어 있으면 비활성화
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp),
@@ -134,3 +126,11 @@ fun SignUpVerificationScreen(
         }
     }
 }
+
+// @Preview(showBackground = true)
+// @Composable
+// fun SignUpNicknameScreenPreview() {
+//    TionTheme {
+//        SignUpNicknameScreen()
+//    }
+// }

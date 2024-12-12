@@ -22,13 +22,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.androidblossomingchildren.R
 
 @Composable
-fun TionDefaultModal() {
+fun TionStampModal(
+    onMove: () -> Unit,
+    onSuccess: Unit,
+) {
     Dialog(onDismissRequest = { }) {
         TionBackground(
             modifier = Modifier
@@ -47,7 +51,10 @@ fun TionDefaultModal() {
                 )
                 Spacer(Modifier.height(20.dp))
                 TionButton(
-                    onClick = { },
+                    onClick = {
+                        onMove()
+                        onSuccess
+                    },
                     modifier = Modifier.width(200.dp),
                     shape = RoundedCornerShape(10.dp),
                     content = {
@@ -56,6 +63,89 @@ fun TionDefaultModal() {
                             fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
                         )
                     },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TionAccuracyModal(
+    id: Int,
+    text: String,
+    accuracy: String,
+    onMove: () -> Unit,
+) {
+    Dialog(onDismissRequest = { }) {
+        TionBackground(
+            modifier = Modifier
+                .size(300.dp)
+                .clip(RoundedCornerShape(16.dp)),
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(
+                    painter = painterResource(id = id),
+                    contentDescription = text,
+                    modifier = Modifier.size(128.dp),
+                )
+                Spacer(Modifier.height(15.dp))
+                Text(
+                    text = "정확도: $accuracy",
+                    fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = text,
+                    fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
+                    fontSize = 20.sp,
+                )
+                Spacer(Modifier.height(15.dp))
+                TionButton(
+                    onClick = {
+                        onMove()
+                    },
+                    modifier = Modifier.width(200.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    content = {
+                        Text(
+                            text = "다음",
+                            fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
+                        )
+                    },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TionModalText(
+    text: String,
+) {
+    Dialog(onDismissRequest = { }) {
+        TionBackground(
+            modifier = Modifier
+                .size(300.dp)
+                .clip(RoundedCornerShape(16.dp)),
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = text,
+                    modifier = Modifier.padding(8.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily(Font(R.font.laundrygothic_regular)),
+                    fontSize = 60.sp,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
         }
@@ -134,7 +224,11 @@ fun TionModalCheck(
 //        ) {
 //            Box(modifier = Modifier.fillMaxSize()) {
 //                // TionDefaultModal()
-//                TionModalCheck()
+//                TionAccuracyModal(
+//                    id = R.drawable.character_good,
+//                    text = "잘했어요!",
+//                    accuracy = "90.7",
+//                )
 //            }
 //        }
 //    }
