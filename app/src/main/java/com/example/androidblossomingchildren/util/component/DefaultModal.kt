@@ -31,7 +31,7 @@ import com.example.androidblossomingchildren.R
 @Composable
 fun TionStampModal(
     onMove: () -> Unit,
-    // onSuccess: Unit,
+    onSuccess: Unit,
 ) {
     Dialog(onDismissRequest = { }) {
         TionBackground(
@@ -53,7 +53,7 @@ fun TionStampModal(
                 TionButton(
                     onClick = {
                         onMove()
-                        // onSuccess
+                        onSuccess
                     },
                     modifier = Modifier.width(200.dp),
                     shape = RoundedCornerShape(10.dp),

@@ -1,13 +1,16 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.example.androidblossomingchildren.ui.presentation
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +18,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,20 +31,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.androidblossomingchildren.R
+import com.example.androidblossomingchildren.libraries.network.dataClass.EducationResult
 import com.example.androidblossomingchildren.ui.components.BottomSheetNameDialog
+import com.example.androidblossomingchildren.ui.config.extractYouTubeVideoId
+import com.example.androidblossomingchildren.ui.config.getEducationInfo
 import com.example.androidblossomingchildren.util.base.Destinations
+import com.example.androidblossomingchildren.util.component.TionGridItem
 import com.example.androidblossomingchildren.util.component.TionModalCheck
 import com.example.androidblossomingchildren.util.component.TionNavigationBar
 import com.example.androidblossomingchildren.util.component.TionNavigationBarContent
@@ -52,6 +66,42 @@ fun MyPageScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     var nickname by remember { mutableStateOf("새싹꿈나무") }
     var showLogoutDialog by remember { mutableStateOf(false) } // 로그아웃 모달 표시 여부
+
+    val context: Context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+    val authId = sharedPreferences.getLong("saved_authId", 0)
+    Log.d("Login: ", "authId: $authId")
+    var showToast by remember { mutableStateOf(false) }
+    var toastMessage by remember { mutableStateOf("") }
+    var itemList by remember { mutableStateOf<List<EducationResult>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(authId) {
+        getEducationInfo(
+            authId,
+            onSuccess = { results ->
+                itemList = results.map { result ->
+                    val videoId = extractYouTubeVideoId(result.url)
+                    val thumbnailUrl = "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
+
+                    EducationResult(
+                        eduId = result.eduId,
+                        title = result.title,
+                        url = thumbnailUrl,
+                        isBookmarked = result.isBookmarked,
+                        achievement = result.achievement,
+                    )
+                }
+                isLoading = false
+            },
+            onFailure = { message ->
+                // 실패 시 토스트 메시지 표시
+                toastMessage = message
+                showToast = true
+                isLoading = false
+            },
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -90,6 +140,7 @@ fun MyPageScreen(
                     .fillMaxWidth()
                     .height(270.dp)
                     .background(MaterialTheme.colorScheme.primary),
+
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -134,9 +185,10 @@ fun MyPageScreen(
                             )
                             if (showBottomSheet) {
                                 BottomSheetNameDialog(
+                                    title = "닉네임",
                                     onDismissRequest = { showBottomSheet = false },
-                                    nickname = nickname,
-                                    onNicknameChange = { newNickname -> nickname = newNickname },
+                                    innerText = nickname,
+                                    onInnerTextChange = { newNickname -> nickname = newNickname },
                                 )
                             }
                         }
@@ -157,14 +209,14 @@ fun MyPageScreen(
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(270.dp),
+                    .height(150.dp),
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.graph),
-                    contentDescription = "동작별 그래프",
-                    modifier = Modifier
-                        .size(250.dp),
-                )
+//                Image(
+//                    painter = painterResource(id = R.drawable.graph),
+//                    contentDescription = "동작별 그래프",
+//                    modifier = Modifier
+//                        .size(250.dp),
+//                )
             }
             Text(
                 text = "북마크",
@@ -177,13 +229,33 @@ fun MyPageScreen(
                     ),
             )
 
-            val itemList = List(20) { "영상 ${it + 1}" }
-//            LazyHorizontalGrid(
-//                rows = GridCells.Fixed(1),
-//                contentPadding = PaddingValues(all = 16.dp),
-//                modifier = Modifier
-//                    .height(230.dp),
-//            ) {
+            // val itemList = List(20) { "영상 ${it + 1}" }
+            LazyHorizontalGrid(
+                rows = GridCells.Fixed(1),
+                contentPadding = PaddingValues(all = 16.dp),
+                modifier = Modifier
+                    .width(500.dp)
+                    .height(230.dp),
+            ) {
+                items(itemList) { item ->
+                    val videoBookmarkedState: MutableState<Boolean> = remember { mutableStateOf(item.isBookmarked) }
+                    if (videoBookmarkedState.value) {
+                        Log.d("TEST", "item.url: ${item.url}")
+                        TionGridItem(
+                            title = item.title,
+                            imageUrl = item.url,
+                            progress = item.achievement,
+                            isBookmarkedState = videoBookmarkedState,
+                            onClick = {
+                                onNavigateToDetail(
+                                    item.eduId,
+                                )
+                            },
+                            addBookmark = {
+                            },
+                        )
+                    }
+                }
 //                items(itemList) { item ->
 //                    TionGridItem(
 //                        item,
@@ -192,11 +264,11 @@ fun MyPageScreen(
 //                        },
 //                    )
 //                }
-//            }
+            }
             Text(
                 text = "로그아웃",
                 color = MaterialTheme.colorScheme.tertiary,
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(

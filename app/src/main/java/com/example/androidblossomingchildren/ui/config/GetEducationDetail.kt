@@ -32,7 +32,6 @@ fun getEducationDetail(
                     onFailure(response.body()?.message ?: "No results found.")
                 }
             } else {
-                val errorMessage = response.body()?.message ?: "Unknown error occurred"
                 onFailure("서버 연결에 실패했습니다. 오류 코드: ${response.body()?.status}")
             }
         }

@@ -9,7 +9,7 @@ import com.example.androidblossomingchildren.libraries.network.dataClass.Consist
 import com.example.androidblossomingchildren.libraries.network.retrofit.RetrofitML
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import java.io.File
 
@@ -20,7 +20,7 @@ fun uploadVideo(
     val videoFile = File(filePath)
 
     // 비디오 파일을 RequestBody로 변환
-    val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), videoFile)
+    val requestBody = videoFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
     val videoPart = MultipartBody.Part.createFormData("education_video", videoFile.name, requestBody)
 
     val service = RetrofitML.instance
