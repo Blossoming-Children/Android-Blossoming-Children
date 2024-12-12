@@ -1,5 +1,6 @@
 package com.example.androidblossomingchildren.ui.config
 
+import android.util.Log
 import com.example.androidblossomingchildren.libraries.network.dataClass.FindEmailResponse
 import com.example.androidblossomingchildren.libraries.network.retrofit.RetrofitClient
 import retrofit2.Call
@@ -29,7 +30,8 @@ fun findEmail(
                 }
             } else {
                 // 서버 응답이 실패 상태 코드일 때 처리
-                onFailure("이메일 조회에 실패했습니다. 오류 코드: ${response.code()}")
+                onFailure(response.body()?.message.toString())
+                Log.d("Response", response.toString())
             }
         }
 

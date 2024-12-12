@@ -94,7 +94,7 @@ fun TionNavigationGraph(
             route = "${Destinations.Video.route}/{videoId}",
             arguments = listOf(
                 navArgument("videoId") {
-                    type = NavType.IntType
+                    type = NavType.StringType
                 },
             ),
         ) { backStackEntry ->
@@ -116,9 +116,8 @@ fun TionNavigationGraph(
                     type = NavType.StringType
                 },
             ),
-        ) { backStackEntry ->
+        ) {
             VideoResultScreen(
-                backStackEntry.arguments?.getInt("videoId"),
                 onNavigateToStamp = { navController.navigateSingleTopTo(Destinations.Stamp.route) },
                 onNavigateToBack = { navController.popBackStack() },
                 viewModel = videoDetailViewModel,
